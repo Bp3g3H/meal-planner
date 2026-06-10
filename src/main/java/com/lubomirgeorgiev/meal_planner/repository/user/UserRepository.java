@@ -1,0 +1,15 @@
+package com.lubomirgeorgiev.meal_planner.repository.user;
+
+import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealLog;
+import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface UserRepository extends JpaRepository<MealLog, UUID> {
+
+    Optional<User> findByUsername(String username);
+}
