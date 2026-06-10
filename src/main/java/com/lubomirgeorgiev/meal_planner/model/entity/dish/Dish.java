@@ -33,5 +33,4 @@ public class Dish {
     private User createdBy;
     @CreationTimestamp
     private LocalDateTime createdOn;
-    //id,name,description,calories,category,imageUrl, createdBy
 }
