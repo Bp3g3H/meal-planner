@@ -1,4 +1,4 @@
-package com.lubomirgeorgiev.meal_planner.service;
+package com.lubomirgeorgiev.meal_planner.service.user;
 
 import com.lubomirgeorgiev.meal_planner.mapper.user.UserMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.RegisterDto;
