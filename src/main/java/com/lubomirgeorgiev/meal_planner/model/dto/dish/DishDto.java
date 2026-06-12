@@ -1,7 +1,7 @@
 package com.lubomirgeorgiev.meal_planner.model.dto.dish;
 
+import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.DishCategory;
-import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,6 +18,6 @@ public class DishDto {
     private double calories;
     private DishCategory category;
     private String imageUrl;
-    private User createdBy;
+    private UserDto createdBy;
     private LocalDateTime createdOn;
 }
