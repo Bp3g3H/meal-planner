@@ -22,9 +22,11 @@ public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(nullable = false)
     private String name;
     private String description;
-    private double calories;
+    @Column(nullable = false)
+    private Integer calories;
     @Enumerated(EnumType.STRING)
     private DishCategory category;
     private String imageUrl;
