@@ -30,6 +30,7 @@ public class MealLog {
     private Dish dish;
     @Enumerated(EnumType.STRING)
     private MealType mealType;
+    @Column(nullable = false)
     private LocalDateTime loggedInOn;
     private String notes;
     @Enumerated(EnumType.STRING)
