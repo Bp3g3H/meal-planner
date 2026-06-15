@@ -1,7 +1,5 @@
 package com.lubomirgeorgiev.meal_planner.model.dto.meal_log;
 
-import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishDto;
-import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealType;
 import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.PortionSize;
 import lombok.Builder;
@@ -14,12 +12,9 @@ import java.util.UUID;
 @Builder
 public class MealLogDto {
 
-    private UUID id;
-
-    private UserDto user;
-    private DishDto dish;
+    UUID dishId;
     private MealType mealType;
-    private LocalDateTime loggedInOn;
     private String notes;
     private PortionSize portionSize;
+    private LocalDateTime loggedInOn;
 }

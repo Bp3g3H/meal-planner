@@ -1,23 +1,16 @@
 package com.lubomirgeorgiev.meal_planner.model.dto.dish;
 
-import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.DishCategory;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
 public class DishDto {
 
-    private UUID id;
     private String name;
     private String description;
-    private double calories;
+    private Integer calories;
     private DishCategory category;
     private String imageUrl;
-    private UserDto createdBy;
-    private LocalDateTime createdOn;
 }
