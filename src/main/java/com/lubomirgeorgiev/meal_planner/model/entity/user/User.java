@@ -2,6 +2,7 @@ package com.lubomirgeorgiev.meal_planner.model.entity.user;
 
 
 
+import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,10 +23,15 @@ public class User {
     private UUID id;
     @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
     @CreationTimestamp
     private LocalDateTime createdOn;
 }
