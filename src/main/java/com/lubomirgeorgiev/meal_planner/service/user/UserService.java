@@ -12,6 +12,8 @@ import com.lubomirgeorgiev.meal_planner.service.group.GroupService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UserService {
 
@@ -53,6 +55,11 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+        return UserMapper.toUserDto(user);
+    }
+
+    public UserDto getById(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return UserMapper.toUserDto(user);
     }
 }
