@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Meal — MealPlanner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__brand">
+        <span class="navbar__logo" aria-hidden="true">🍽</span>
+        MealPlanner
+      </a>
+      <ul class="navbar__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dish-catalog.html">Dish Catalog</a></li>
+        <li><a href="log-meal.html">Log Meal</a></li>
+        <li><a href="my-diary.html">My Diary</a></li>
+        <li><a href="group-settings.html">Group</a></li>
+        <li><a href="admin-dishes.html">Admin</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-card form-card--wide">
+      <h1>Edit Meal Log</h1>
+      <p class="subtitle">Editing entry for Thursday, June 5, 2026</p>
+
+      <form action="#" method="post">
+        <div class="form-group">
+          <label for="dish">Dish</label>
+          <select id="dish" name="dish" required>
+            <option value="">— Select a dish —</option>
+            <option value="oatmeal" selected>Oatmeal with Berries (320 kcal)</option>
+            <option value="avocado-toast">Avocado Toast (280 kcal)</option>
+            <option value="chicken-salad">Grilled Chicken Salad (410 kcal)</option>
+            <option value="pasta-primavera">Pasta Primavera (480 kcal)</option>
+            <option value="baked-salmon">Baked Salmon &amp; Rice (520 kcal)</option>
+            <option value="stir-fry">Vegetable Stir-Fry (350 kcal)</option>
+            <option value="mixed-nuts">Mixed Nuts (180 kcal)</option>
+            <option value="apple-pb">Apple with Peanut Butter (210 kcal)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="meal-type">Meal Type</label>
+          <select id="meal-type" name="meal-type" required>
+            <option value="breakfast" selected>Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="snack">Snack</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" name="date" value="2026-06-05" required>
+        </div>
+
+        <div class="form-group">
+          <label for="portion">Portion Size</label>
+          <select id="portion" name="portion" required>
+            <option value="small">Small</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+          </select>
+          <p class="hint">Calories are adjusted based on portion size.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes <span style="font-weight: 400; color: var(--color-text-muted);">(optional)</span></label>
+          <textarea
+            id="notes"
+            name="notes"
+            placeholder="e.g. Added extra honey, ate at the office cafeteria…"
+          >Added extra blueberries and a drizzle of honey.</textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary">Save Changes</button>
+          <a href="my-diary.html" class="btn btn--outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+  </footer>
+</body>
+</html>

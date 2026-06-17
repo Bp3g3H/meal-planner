@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Diary — MealPlanner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__brand">
+        <span class="navbar__logo" aria-hidden="true">🍽</span>
+        MealPlanner
+      </a>
+      <ul class="navbar__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dish-catalog.html">Dish Catalog</a></li>
+        <li><a href="log-meal.html">Log Meal</a></li>
+        <li><a href="my-diary.html" class="active">My Diary</a></li>
+        <li><a href="group-settings.html">Group</a></li>
+        <li><a href="admin-dishes.html">Admin</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <header class="page-header">
+      <h1>My Food Diary</h1>
+      <p>Logged meals for <strong>johndoe</strong> — review your eating history by date.</p>
+    </header>
+
+    <div class="diary-summary">
+      <div class="summary-card">
+        <div class="summary-card__value">1,840</div>
+        <div class="summary-card__label">kcal today (Jun 5)</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card__value">4</div>
+        <div class="summary-card__label">meals logged today</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card__value">12</div>
+        <div class="summary-card__label">total entries this week</div>
+      </div>
+    </div>
+
+    <section class="diary-date-group">
+      <h2>Thursday, June 5, 2026</h2>
+      <div class="diary-entries">
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Oatmeal with Berries</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--breakfast">Breakfast</span>
+              <span>Portion: <strong>Medium</strong></span>
+              <span>Calories: <strong>320 kcal</strong></span>
+            </div>
+          </div>
+          <div class="diary-entry__actions">
+            <div class="btn-group">
+              <a href="edit-meal.html" class="btn btn--outline btn--sm">Edit</a>
+              <form action="#" method="post">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+              </form>
+            </div>
+          </div>
+          <p class="diary-entry__notes">Added extra blueberries and a drizzle of honey.</p>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Grilled Chicken Salad</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--lunch">Lunch</span>
+              <span>Portion: <strong>Large</strong></span>
+              <span>Calories: <strong>615 kcal</strong></span>
+            </div>
+          </div>
+          <div class="diary-entry__actions">
+            <div class="btn-group">
+              <a href="edit-meal.html" class="btn btn--outline btn--sm">Edit</a>
+              <form action="#" method="post">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+              </form>
+            </div>
+          </div>
+          <p class="diary-entry__notes">Ate at the office cafeteria. Skipped the croutons.</p>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Mixed Nuts</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--snack">Snack</span>
+              <span>Portion: <strong>Small</strong></span>
+              <span>Calories: <strong>180 kcal</strong></span>
+            </div>
+          </div>
+          <div class="diary-entry__actions">
+            <div class="btn-group">
+              <a href="edit-meal.html" class="btn btn--outline btn--sm">Edit</a>
+              <form action="#" method="post">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+              </form>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Baked Salmon &amp; Rice</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--dinner">Dinner</span>
+              <span>Portion: <strong>Medium</strong></span>
+              <span>Calories: <strong>520 kcal</strong></span>
+            </div>
+          </div>
+          <div class="diary-entry__actions">
+            <div class="btn-group">
+              <a href="edit-meal.html" class="btn btn--outline btn--sm">Edit</a>
+              <form action="#" method="post">
+                <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+              </form>
+            </div>
+          </div>
+          <p class="diary-entry__notes">Homemade — used lemon and dill seasoning.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="diary-date-group">
+      <h2>Wednesday, June 4, 2026</h2>
+      <div class="diary-entries">
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Avocado Toast</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--breakfast">Breakfast</span>
+              <span>Portion: <strong>Medium</strong></span>
+              <span>Calories: <strong>280 kcal</strong></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Pasta Primavera</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--lunch">Lunch</span>
+              <span>Portion: <strong>Medium</strong></span>
+              <span>Calories: <strong>480 kcal</strong></span>
+            </div>
+          </div>
+          <p class="diary-entry__notes">Leftover from yesterday's dinner.</p>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Apple with Peanut Butter</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--snack">Snack</span>
+              <span>Portion: <strong>Small</strong></span>
+              <span>Calories: <strong>210 kcal</strong></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Vegetable Stir-Fry</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--dinner">Dinner</span>
+              <span>Portion: <strong>Large</strong></span>
+              <span>Calories: <strong>525 kcal</strong></span>
+            </div>
+          </div>
+          <p class="diary-entry__notes">Extra tofu added for protein.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="diary-date-group">
+      <h2>Tuesday, June 3, 2026</h2>
+      <div class="diary-entries">
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Oatmeal with Berries</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--breakfast">Breakfast</span>
+              <span>Portion: <strong>Small</strong></span>
+              <span>Calories: <strong>240 kcal</strong></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Grilled Chicken Salad</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--lunch">Lunch</span>
+              <span>Portion: <strong>Medium</strong></span>
+              <span>Calories: <strong>410 kcal</strong></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="diary-entry">
+          <div class="diary-entry__main">
+            <h3>Pasta Primavera</h3>
+            <div class="diary-entry__meta">
+              <span class="badge badge--dinner">Dinner</span>
+              <span>Portion: <strong>Large</strong></span>
+              <span>Calories: <strong>720 kcal</strong></span>
+            </div>
+          </div>
+          <p class="diary-entry__notes">Cooked a big batch for two nights.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+  </footer>
+</body>
+</html>

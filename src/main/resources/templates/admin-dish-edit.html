@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Dish — MealPlanner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__brand">
+        <span class="navbar__logo" aria-hidden="true">🍽</span>
+        MealPlanner
+      </a>
+      <ul class="navbar__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dish-catalog.html">Dish Catalog</a></li>
+        <li><a href="log-meal.html">Log Meal</a></li>
+        <li><a href="my-diary.html">My Diary</a></li>
+        <li><a href="group-settings.html">Group</a></li>
+        <li><a href="admin-dishes.html" class="active">Admin</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-card form-card--wide">
+      <h1>Edit Dish</h1>
+      <p class="subtitle">Update dish #1 — Oatmeal with Berries</p>
+
+      <form action="#" method="post">
+        <div class="form-group">
+          <label for="dish-name">Dish Name</label>
+          <input
+            type="text"
+            id="dish-name"
+            name="dish-name"
+            value="Oatmeal with Berries"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="dish-category">Category</label>
+          <select id="dish-category" name="dish-category" required>
+            <option value="breakfast" selected>Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="snack">Snack</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dish-calories">Calories (Medium Portion)</label>
+          <input type="number" id="dish-calories" name="dish-calories" value="320" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label for="dish-description">Description</label>
+          <textarea id="dish-description" name="dish-description" required>Creamy steel-cut oats with fresh berries and honey.</textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary">Update Dish</button>
+          <a href="admin-dishes.html" class="btn btn--outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+  </footer>
+</body>
+</html>

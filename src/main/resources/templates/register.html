@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — MealPlanner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__brand">
+        <span class="navbar__logo" aria-hidden="true">🍽</span>
+        MealPlanner
+      </a>
+      <ul class="navbar__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dish-catalog.html">Dish Catalog</a></li>
+        <li><a href="log-meal.html">Log Meal</a></li>
+        <li><a href="my-diary.html">My Diary</a></li>
+        <li><a href="group-settings.html">Group</a></li>
+        <li><a href="admin-dishes.html">Admin</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html" class="active">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-card form-card--wide">
+      <h1>Create an Account</h1>
+      <p class="subtitle">Join MealPlanner and start tracking your meals today.</p>
+
+      <form action="#" method="post">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="johndoe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="Re-enter password"
+            required
+          >
+        </div>
+
+        <fieldset class="form-fieldset">
+          <legend>Group</legend>
+
+          <label class="radio-label">
+            <input type="radio" name="groupChoice" value="CREATE" checked>
+            Create a new group
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="groupChoice" value="JOIN">
+            Join an existing group
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="groupChoice" value="NONE">
+            Continue without (you can set this up later)
+          </label>
+        </fieldset>
+
+        <div class="form-group" id="group-name-field">
+          <label for="group-name">Group Name</label>
+          <input
+            type="text"
+            id="group-name"
+            name="group-name"
+            placeholder="e.g. Smith Family Meals"
+          >
+        </div>
+
+        <div class="form-group" id="group-password-field">
+          <label for="group-password">Group Password</label>
+          <input
+            type="text"
+            id="group-password"
+            name="group-password"
+            placeholder="Leave blank for a public group"
+          >
+          <p class="hint" id="group-password-hint">Optional — leave blank to create a public group.</p>
+        </div>
+
+        <button type="submit" class="btn btn--primary" style="width: 100%;">Register</button>
+      </form>
+
+      <p class="form-footer">
+        Already have an account? <a href="login.html">Login here</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+  </footer>
+
+  <script>
+    const groupPasswordInput = document.getElementById('group-password');
+    const groupPasswordHint = document.getElementById('group-password-hint');
+
+    document.querySelectorAll('input[name="groupChoice"]').forEach((radio) => {
+      radio.addEventListener('change', updateGroupFields);
+    });
+
+    function updateGroupFields() {
+      const choice = document.querySelector('input[name="groupChoice"]:checked').value;
+      const showName = choice !== 'NONE';
+      const showPassword = choice === 'JOIN' || choice === 'CREATE';
+
+      document.getElementById('group-name-field').style.display = showName ? 'block' : 'none';
+      document.getElementById('group-password-field').style.display = showPassword ? 'block' : 'none';
+
+      if (choice === 'JOIN') {
+        groupPasswordInput.placeholder = 'Group password (required for private groups)';
+        groupPasswordHint.textContent = 'Required if the group is private.';
+      } else if (choice === 'CREATE') {
+        groupPasswordInput.placeholder = 'Leave blank for a public group';
+        groupPasswordHint.textContent = 'Optional — leave blank to create a public group.';
+      }
+    }
+
+    updateGroupFields();
+  </script>
+</body>
+</html>
