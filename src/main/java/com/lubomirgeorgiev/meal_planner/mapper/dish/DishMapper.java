@@ -10,7 +10,6 @@ public class DishMapper {
 
     public static DishDto toDishDto(Dish dish) {
         return DishDto.builder()
-                .id(dish.getId())
                 .name(dish.getName())
                 .description(dish.getDescription())
                 .calories(dish.getCalories())
