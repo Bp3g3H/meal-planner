@@ -1,8 +1,9 @@
 package com.lubomirgeorgiev.meal_planner.service.user;
 
+import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
 import com.lubomirgeorgiev.meal_planner.mapper.user.UserMapper;
-import com.lubomirgeorgiev.meal_planner.model.dto.user.RegisterDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.GroupChoice;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
@@ -28,10 +29,10 @@ public class UserService {
     }
 
 
-    public UserDto register (RegisterDto registerDto) {
+    public UserDto register (UserRegisterRequest registerDto) {
         if (userRepository.existsByEmail(registerDto.getEmail()) || userRepository.existsByUsername(registerDto.getUsername())) {
             //TODO change to UserAlreadyExistsException
-            throw new RuntimeException("User already exists");
+            throw new UserAlreadyExistsException("User already exists");
         }
 
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {

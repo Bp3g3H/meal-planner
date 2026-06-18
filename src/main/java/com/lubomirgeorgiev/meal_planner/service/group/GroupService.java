@@ -1,5 +1,8 @@
 package com.lubomirgeorgiev.meal_planner.service.group;
 
+import com.lubomirgeorgiev.meal_planner.exception.GroupNameTakenException;
+import com.lubomirgeorgiev.meal_planner.exception.GroupNotFoundException;
+import com.lubomirgeorgiev.meal_planner.exception.InvalidGroupPasswordException;
 import com.lubomirgeorgiev.meal_planner.model.dto.group.GroupUpgradeDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
 import com.lubomirgeorgiev.meal_planner.repository.group.GroupRepository;
@@ -21,8 +24,7 @@ public class GroupService {
 
     public Group createGroup(String name, String rawPassword) {
         if (groupRepository.existsByName(name)) {
-            // TODO change to GroupNameTakenException
-            throw new RuntimeException("Group already exists");
+            throw new GroupNameTakenException("Group already exists");
         }
 
         String password = rawPassword == null || rawPassword.isBlank() ? null : passwordEncoder.encode(rawPassword);
@@ -38,18 +40,15 @@ public class GroupService {
 
     public Group joinGroup (String name, String rawPassword) {
         Group group = groupRepository.findByName(name)
-                // TODO change to GroupNotFoundException
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
 
         if (group.isDummy()) {
-            // TODO change to GroupNotFoundException
-            new RuntimeException("Group not found");
+            new GroupNotFoundException("Group not found");
         }
 
         if (!group.isPublic()) {
             if (rawPassword == null || !passwordEncoder.matches(rawPassword, group.getPassword()) ) {
-                // TODO change to InvalidGroupPasswordException
-                throw new RuntimeException("Passwords do not match");
+                throw new InvalidGroupPasswordException();
             }
         }
 
@@ -67,16 +66,14 @@ public class GroupService {
 
     public Group upgradeDummyGroup(UUID groupId, GroupUpgradeDto groupUpgradeDto, UUID userId) {
         Group group = groupRepository.findById(groupId)
-                // TODO GroupNotFoundException
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
 
         if (!group.isDummy()) {
             throw new IllegalStateException("(Group is already upgraded");
         }
 
         if (groupRepository.existsByName(group.getName())) {
-            // TODO GroupNameTakenException
-            throw new RuntimeException("Group already exists");
+            throw new GroupNameTakenException("Group already exists");
         }
 
         group.setName(groupUpgradeDto.getName());

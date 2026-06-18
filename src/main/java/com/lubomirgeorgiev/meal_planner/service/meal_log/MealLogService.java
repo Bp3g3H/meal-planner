@@ -1,5 +1,8 @@
 package com.lubomirgeorgiev.meal_planner.service.meal_log;
 
+import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
+import com.lubomirgeorgiev.meal_planner.exception.MealLogNotFoundException;
+import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealLog;
@@ -26,10 +29,9 @@ public class MealLogService {
     }
 
     public MealLog logMeal(MealLogDto mealLogDto, UUID userId) {
-        // TODO change exception
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        // TODO change DishNotFoundException
-        Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new RuntimeException("Dish not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserAlreadyExistsException("User not found"));
+
+        Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new DishNotFoundException(mealLogDto.getDishId()));
 
         MealLog mealLog = MealLog.builder()
                 .user(user)
@@ -45,12 +47,10 @@ public class MealLogService {
     }
 
     public MealLog findByIdAndUser(UUID id, UUID userId) {
-        // TODO change MealLogNotFoundException
-        MealLog log = mealLogRepository.findById(id).orElseThrow(() -> new RuntimeException("Meal Log not found"));
+        MealLog log = mealLogRepository.findById(id).orElseThrow(() -> new MealLogNotFoundException(id));
 
         if (!log.getUser().getId().equals(userId)) {
-            // TODO change MealLogNotFoundException
-            throw new RuntimeException("Meal Log not found");
+            throw new MealLogNotFoundException(log.getId());
         }
 
         return log;
@@ -59,7 +59,7 @@ public class MealLogService {
     public MealLog updateMeal(UUID id, MealLogDto mealLogDto, UUID userId) {
         MealLog log = findByIdAndUser(id, userId);
         // TODO change DishNotFoundException
-        Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new RuntimeException("Dish not found"));
+        Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new DishNotFoundException(mealLogDto.getDishId()));
 
         log.setDish(dish);
         log.setMealType(mealLogDto.getMealType());
