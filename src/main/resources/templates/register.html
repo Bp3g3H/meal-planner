@@ -16,7 +16,7 @@
 
         <div th:if="${error}" class="error-text" th:text="${error}" role="alert"></div>
 
-        <form th:action="@{/register}" th:object="${registerDto}" method="post">
+        <form th:action="@{/register}" th:object="${userRegisterRequest}" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" th:field="*{username}" placeholder="johndoe">

@@ -6,6 +6,7 @@ import com.lubomirgeorgiev.meal_planner.exception.GroupNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.InvalidGroupPasswordException;
 import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
+import com.lubomirgeorgiev.meal_planner.model.entity.user.GroupChoice;
 import com.lubomirgeorgiev.meal_planner.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -36,13 +37,15 @@ public class IndexController {
         UserRegisterRequest userRegisterRequest = UserRegisterRequest.builder().build();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("register");
-        modelAndView.addObject("registerDto", userRegisterRequest);
+        modelAndView.addObject("userRegisterRequest", userRegisterRequest);
         return modelAndView;
     }
 
     @PostMapping("/register")
     public ModelAndView getRegisterPage(@Valid @ModelAttribute UserRegisterRequest userRegisterRequest, BindingResult bindingResult) {
+        validateGroupFields(userRegisterRequest, bindingResult);
         ModelAndView modelAndView = new ModelAndView();
+
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("register");
             return modelAndView;
@@ -78,6 +81,16 @@ public class IndexController {
         modelAndView.setViewName("login");
         modelAndView.addObject("userLoginRequest", userLoginRequest);
         return modelAndView;
+    }
+
+    private void validateGroupFields(UserRegisterRequest dto, BindingResult result) {
+        if (dto.getGroupChoice() == GroupChoice.NONE) {
+            return;
+        }
+
+        if (dto.getGroupName() == null || dto.getGroupName().isBlank()) {
+            result.rejectValue("groupName", "group.required", "Group name is required");
+        }
     }
 //
 //    @PostMapping("/login")
