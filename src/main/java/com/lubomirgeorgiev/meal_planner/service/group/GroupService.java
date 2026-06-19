@@ -56,12 +56,13 @@ public class GroupService {
     }
 
     public Group createDummyGroup() {
-        return Group.builder()
+        Group group = Group.builder()
                 .name(null)
                 .password(null)
                 .isDummy(true)
                 .isPublic(false)
                 .build();
+        return groupRepository.save(group);
     }
 
     public Group upgradeDummyGroup(UUID groupId, GroupUpgradeDto groupUpgradeDto, UUID userId) {
