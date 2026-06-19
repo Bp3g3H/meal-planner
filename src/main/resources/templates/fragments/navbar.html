@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" class="navbar">
+  <div class="navbar__inner">
+    <a th:href="@{/}" class="navbar__brand">
+      <span class="navbar__logo" aria-hidden="true">🍽</span>
+      MealPlanner
+    </a>
+    <ul class="navbar__links">
+      <li><a th:href="@{/}">Home</a></li>
+      <li><a th:href="@{/dishes}">Dish Catalog</a></li>
+      <li th:if="${isLoggedIn}">
+        <a th:href="@{/meals/log}">Log Meal</a>
+      </li>
+      <li th:if="${isLoggedIn}">
+        <a th:href="@{/meals/diary}">My Diary</a>
+      </li>
+      <li th:if="${isLoggedIn}">
+        <a th:href="@{/group}">Group</a>
+      </li>
+      <li th:if="${isAdmin}">
+        <a th:href="@{/admin/dishes}">Admin</a>
+      </li>
+      <li th:unless="${isLoggedIn}">
+        <a th:href="@{/login}">Login</a>
+      </li>
+      <li th:unless="${isLoggedIn}">
+        <a th:href="@{/register}">Register</a>
+      </li>
+      <li th:if="${isLoggedIn}">
+        <form th:action="@{/logout}" method="post" class="navbar__logout-form">
+          <button type="submit" class="navbar__logout-btn">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
+</body>
+</html>

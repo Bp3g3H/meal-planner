@@ -12,6 +12,7 @@ import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
 import com.lubomirgeorgiev.meal_planner.service.group.GroupService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -28,10 +29,9 @@ public class UserService {
         this.groupService = groupService;
     }
 
-
+    @Transactional
     public UserDto register (UserRegisterRequest registerDto) {
         if (userRepository.existsByEmail(registerDto.getEmail()) || userRepository.existsByUsername(registerDto.getUsername())) {
-            //TODO change to UserAlreadyExistsException
             throw new UserAlreadyExistsException("User already exists");
         }
 

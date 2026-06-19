@@ -1,6 +1,6 @@
 package com.lubomirgeorgiev.meal_planner.mapper.user;
 
-import com.lubomirgeorgiev.meal_planner.model.dto.user.RegisterDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.UserRole;
@@ -20,7 +20,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User toUserEntity(RegisterDto registerDto) {
+    public static User toUserEntity(UserRegisterRequest registerDto) {
         return User.builder()
                 .username(registerDto.getUsername())
                 .email(registerDto.getEmail())
