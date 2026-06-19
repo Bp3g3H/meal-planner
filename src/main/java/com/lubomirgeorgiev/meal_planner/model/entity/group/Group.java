@@ -22,7 +22,7 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String name;
     private String password;
     @Column(columnDefinition = "boolean default true")

@@ -28,10 +28,12 @@ public class User {
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole role;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdOn;
 }
