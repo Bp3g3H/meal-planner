@@ -4,27 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dish Catalog — MealPlanner</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar__inner">
-      <a href="home" class="navbar__brand">
-        <span class="navbar__logo" aria-hidden="true">🍽</span>
-        MealPlanner
-      </a>
-      <ul class="navbar__links">
-        <li><a href="home">Home</a></li>
-        <li><a href="dish-catalog" class="active">Dish Catalog</a></li>
-        <li><a href="log-meal">Log Meal</a></li>
-        <li><a href="my-diary">My Diary</a></li>
-        <li><a href="group-settings">Group</a></li>
-        <li><a href="admin-dishes">Admin</a></li>
-        <li><a href="login">Login</a></li>
-        <li><a href="register">Register</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
 
   <main>
     <header class="page-header">
@@ -32,119 +15,33 @@
       <p>Browse our collection of meals and snacks to add to your food diary.</p>
     </header>
 
-    <div class="dish-grid">
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🥣</div>
+    <div class="dish-grid" th:if="${!dishes.isEmpty()}">
+      <article class="dish-card" th:each="dish : ${dishes}">
+        <div class="dish-card__image" th:if="${dish.imageUrl == null or dish.imageUrl.isEmpty()}"
+             aria-hidden="true">🍽</div>
+        <img th:if="${dish.imageUrl != null and !dish.imageUrl.isEmpty()}"
+             th:src="${dish.imageUrl}" th:alt="${dish.name}" class="dish-card__image">
         <div class="dish-card__body">
           <div class="dish-card__header">
-            <h2 class="dish-card__title">Oatmeal with Berries</h2>
-            <span class="badge badge--breakfast">Breakfast</span>
+            <h2 class="dish-card__title" th:text="${dish.name}"></h2>
+            <span class="badge"
+                  th:text="${dish.category}"
+                  th:classappend="' badge--' + ${#strings.toLowerCase(dish.category)}"></span>
           </div>
-          <p class="dish-card__calories"><strong>320 kcal</strong> per medium serving</p>
-          <p class="dish-card__description">
-            Creamy steel-cut oats topped with fresh blueberries, strawberries, and a drizzle of honey.
+          <p class="dish-card__calories">
+            <strong th:text="${dish.calories} + ' kcal'"></strong> per medium serving
           </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🍳</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Avocado Toast</h2>
-            <span class="badge badge--breakfast">Breakfast</span>
-          </div>
-          <p class="dish-card__calories"><strong>280 kcal</strong> per medium serving</p>
-          <p class="dish-card__description">
-            Toasted sourdough spread with mashed avocado, cherry tomatoes, and a sprinkle of sea salt.
-          </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🥗</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Grilled Chicken Salad</h2>
-            <span class="badge badge--lunch">Lunch</span>
-          </div>
-          <p class="dish-card__calories"><strong>410 kcal</strong> per medium serving</p>
-          <p class="dish-card__description">
-            Mixed greens with grilled chicken breast, cucumber, cherry tomatoes, and balsamic vinaigrette.
-          </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🍝</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Pasta Primavera</h2>
-            <span class="badge badge--lunch">Lunch</span>
-          </div>
-          <p class="dish-card__calories"><strong>480 kcal</strong> per medium serving</p>
-          <p class="dish-card__description">
-            Penne pasta tossed with seasonal vegetables, garlic, olive oil, and fresh basil.
-          </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🐟</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Baked Salmon &amp; Rice</h2>
-            <span class="badge badge--dinner">Dinner</span>
-          </div>
-          <p class="dish-card__calories"><strong>520 kcal</strong> per medium serving</p>
-          <p class="dish-card__description">
-            Oven-baked salmon fillet served with steamed brown rice and roasted asparagus.
-          </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🍲</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Vegetable Stir-Fry</h2>
-            <span class="badge badge--dinner">Dinner</span>
-          </div>
-          <p class="dish-card__calories"><strong>350 kcal</strong> per medium serving</p>
-          <p class="dish-card__description">
-            Colorful mix of bell peppers, broccoli, and snap peas in a light ginger-soy sauce.
-          </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🥜</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Mixed Nuts</h2>
-            <span class="badge badge--snack">Snack</span>
-          </div>
-          <p class="dish-card__calories"><strong>180 kcal</strong> per small serving</p>
-          <p class="dish-card__description">
-            A handful of almonds, cashews, and walnuts — a protein-rich afternoon pick-me-up.
-          </p>
-        </div>
-      </article>
-
-      <article class="dish-card">
-        <div class="dish-card__image" aria-hidden="true">🍎</div>
-        <div class="dish-card__body">
-          <div class="dish-card__header">
-            <h2 class="dish-card__title">Apple with Peanut Butter</h2>
-            <span class="badge badge--snack">Snack</span>
-          </div>
-          <p class="dish-card__calories"><strong>210 kcal</strong> per small serving</p>
-          <p class="dish-card__description">
-            Sliced crisp apple paired with a tablespoon of natural peanut butter.
-          </p>
+          <p class="dish-card__description" th:text="${dish.description}"></p>
         </div>
       </article>
     </div>
+
+    <p th:if="${dishes.isEmpty()}" class="prototype-note">
+      No dishes in the catalog yet.
+      <span th:if="${isAdmin}">
+        <a th:href="@{/admin/dishes/add}">Add the first dish</a>.
+      </span>
+    </p>
   </main>
 
   <footer class="footer">

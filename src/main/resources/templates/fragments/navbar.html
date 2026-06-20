@@ -10,25 +10,25 @@
     <ul class="navbar__links">
       <li><a th:href="@{/}">Home</a></li>
       <li><a th:href="@{/dishes}">Dish Catalog</a></li>
-      <li th:if="${isLoggedIn}">
+      <li th:if="${session.user_id != null}">
         <a th:href="@{/meals/log}">Log Meal</a>
       </li>
-      <li th:if="${isLoggedIn}">
+      <li th:if="${session.user_id != null}">
         <a th:href="@{/meals/diary}">My Diary</a>
       </li>
-      <li th:if="${isLoggedIn}">
+      <li th:if="${session.user_id != null}">
         <a th:href="@{/group}">Group</a>
       </li>
-      <li th:if="${isAdmin}">
+      <li th:if="${session.user_role == 'ADMIN'}">
         <a th:href="@{/admin/dishes}">Admin</a>
       </li>
-      <li th:unless="${isLoggedIn}">
+      <li th:unless="${session.user_id != null}">
         <a th:href="@{/login}">Login</a>
       </li>
-      <li th:unless="${isLoggedIn}">
+      <li th:unless="${session.user_id != null}">
         <a th:href="@{/register}">Register</a>
       </li>
-      <li th:if="${isLoggedIn}">
+      <li th:if="${session.user_id != null}">
         <form th:action="@{/logout}" method="post" class="navbar__logout-form">
           <button type="submit" class="navbar__logout-btn">Logout</button>
         </form>

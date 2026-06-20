@@ -4,9 +4,10 @@ import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface DishRepository extends JpaRepository<Dish, UUID> {
-    <List>Dish findAllByOrderByNameAsc();
+    List<Dish> findAllByOrderByNameAsc();
 }

@@ -1,65 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MealPlanner — Personal Meal Planner &amp; Food Diary</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MealPlanner — Personal Meal Planner &amp; Food Diary</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar__inner">
-      <a href="home" class="navbar__brand">
-        <span class="navbar__logo" aria-hidden="true">🍽</span>
-        MealPlanner
-      </a>
-      <ul class="navbar__links">
-        <li><a href="home" class="active">Home</a></li>
-        <li><a href="dish-catalog">Dish Catalog</a></li>
-        <li><a href="log-meal">Log Meal</a></li>
-        <li><a href="my-diary">My Diary</a></li>
-        <li><a href="group-settings">Group</a></li>
-        <li><a href="admin-dishes">Admin</a></li>
-        <li><a href="login">Login</a></li>
-        <li><a href="register">Register</a></li>
-      </ul>
-    </div>
-  </nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-  <main>
+<main>
     <section class="hero">
-      <h1>Welcome to MealPlanner</h1>
-      <p>
-        Your personal meal planner and food diary. Track what you eat,
-        discover new dishes, and stay on top of your nutrition goals.
-      </p>
-      <div class="hero__actions">
-        <a href="login" class="btn btn--secondary">Login</a>
-        <a href="register" class="btn btn--primary">Register</a>
-      </div>
+        <h1>Welcome to MealPlanner</h1>
+        <p>
+            Your personal meal planner and food diary. Track what you eat,
+            discover new dishes, and stay on top of your nutrition goals.
+        </p>
+        <div class="hero__actions" th:unless="${isLoggedIn}">
+            <a th:href="@{/login}" class="btn btn--secondary">Login</a>
+            <a th:href="@{/register}" class="btn btn--primary">Register</a>
+        </div>
+        <div class="hero__actions" th:if="${isLoggedIn}">
+            <a th:href="@{/meals/diary}" class="btn btn--primary">Go to My Diary</a>
+            <a th:href="@{/dishes}" class="btn btn--secondary">Browse Dishes</a>
+        </div>
     </section>
 
     <section class="features">
-      <article class="feature-card">
-        <div class="feature-card__icon" aria-hidden="true">📋</div>
-        <h3>Browse Dishes</h3>
-        <p>Explore our catalog of breakfast, lunch, dinner, and snack options.</p>
-      </article>
-      <article class="feature-card">
-        <div class="feature-card__icon" aria-hidden="true">✏️</div>
-        <h3>Log Your Meals</h3>
-        <p>Record what you eat with portion sizes, dates, and personal notes.</p>
-      </article>
-      <article class="feature-card">
-        <div class="feature-card__icon" aria-hidden="true">📅</div>
-        <h3>Food Diary</h3>
-        <p>Review your eating history grouped by date and track daily calories.</p>
-      </article>
+        <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">📋</div>
+            <h3>Browse Dishes</h3>
+            <p>Explore our catalog of breakfast, lunch, dinner, and snack options.</p>
+        </article>
+        <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">✏️</div>
+            <h3>Log Your Meals</h3>
+            <p>Record what you eat with portion sizes, dates, and personal notes.</p>
+        </article>
+        <article class="feature-card">
+            <div class="feature-card__icon" aria-hidden="true">📅</div>
+            <h3>Food Diary</h3>
+            <p>Review your eating history grouped by date and track daily calories.</p>
+        </article>
     </section>
-  </main>
+</main>
 
-  <footer class="footer">
+<footer class="footer">
     <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
-  </footer>
+</footer>
 </body>
 </html>

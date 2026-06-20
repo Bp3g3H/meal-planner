@@ -23,7 +23,7 @@ public class DishService {
     }
 
     public List<DishDto> findAll() {
-        return dishRepository.findAll().stream().map(DishMapper::toDishDto).toList();
+        return dishRepository.findAllByOrderByNameAsc().stream().map(DishMapper::toDishDto).toList();
     }
 
     public DishDto findById(UUID id) {
