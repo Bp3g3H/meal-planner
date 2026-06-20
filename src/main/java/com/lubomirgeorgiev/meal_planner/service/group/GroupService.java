@@ -18,8 +18,9 @@ public class GroupService {
     private GroupRepository groupRepository;
     private PasswordEncoder passwordEncoder;
 
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, PasswordEncoder passwordEncoder) {
         this.groupRepository = groupRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Group createGroup(String name, String rawPassword) {
@@ -40,10 +41,10 @@ public class GroupService {
 
     public Group joinGroup (String name, String rawPassword) {
         Group group = groupRepository.findByName(name)
-                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
+                .orElseThrow(GroupNotFoundException::new);
 
         if (group.isDummy()) {
-            new GroupNotFoundException("Group not found");
+            throw new GroupNotFoundException();
         }
 
         if (!group.isPublic()) {
@@ -67,7 +68,7 @@ public class GroupService {
 
     public Group upgradeDummyGroup(UUID groupId, GroupUpgradeDto groupUpgradeDto, UUID userId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new GroupNotFoundException("Group not found"));
+                .orElseThrow(GroupNotFoundException::new);
 
         if (!group.isDummy()) {
             throw new IllegalStateException("(Group is already upgraded");
