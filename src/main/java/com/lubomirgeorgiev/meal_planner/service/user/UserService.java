@@ -1,7 +1,9 @@
 package com.lubomirgeorgiev.meal_planner.service.user;
 
+import com.lubomirgeorgiev.meal_planner.exception.InvalidCredentialsException;
 import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
 import com.lubomirgeorgiev.meal_planner.mapper.user.UserMapper;
+import com.lubomirgeorgiev.meal_planner.model.dto.user.LoginDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -62,5 +65,16 @@ public class UserService {
     public UserDto getById(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return UserMapper.toUserDto(user);
+    }
+
+    public UserDto login (LoginDto loginDto) {
+        Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
+
+        if (user.isEmpty() ||
+                !passwordEncoder.matches(loginDto.getPassword(), user.get().getPassword())) {
+            throw new InvalidCredentialsException();
+        }
+
+        return UserMapper.toUserDto(user.get());
     }
 }

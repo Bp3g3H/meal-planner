@@ -1,13 +1,13 @@
 package com.lubomirgeorgiev.meal_planner.web;
 
 
-import com.lubomirgeorgiev.meal_planner.exception.GroupNameTakenException;
-import com.lubomirgeorgiev.meal_planner.exception.GroupNotFoundException;
-import com.lubomirgeorgiev.meal_planner.exception.InvalidGroupPasswordException;
-import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
+import com.lubomirgeorgiev.meal_planner.exception.*;
+import com.lubomirgeorgiev.meal_planner.model.dto.user.LoginDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.GroupChoice;
 import com.lubomirgeorgiev.meal_planner.service.user.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -76,11 +76,36 @@ public class IndexController {
 
     @GetMapping("/login")
     public ModelAndView getLoginPage(){
-        UserRegisterRequest userLoginRequest = UserRegisterRequest.builder().build();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
-        modelAndView.addObject("userLoginRequest", userLoginRequest);
+        modelAndView.addObject("loginDto", LoginDto.builder().build());
         return modelAndView;
+    }
+
+    @PostMapping("/login")
+    public ModelAndView getLoginPage(
+            @Valid @ModelAttribute LoginDto loginDto,
+            BindingResult bindingResult,
+            HttpSession session) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        if(bindingResult.hasErrors()){
+           modelAndView.setViewName("login");
+           return modelAndView;
+        }
+
+        try {
+            UserDto user = userService.login(loginDto);
+            session.setAttribute("user_id", user.getId());
+            session.setAttribute("user_role", user.getRole().name());
+        } catch (InvalidCredentialsException ex) {
+            modelAndView.setViewName("login");
+            modelAndView.addObject("error", ex.getMessage());
+            return modelAndView;
+        }
+
+
+        return new ModelAndView("redirect:/dishes");
     }
 
     private void validateGroupFields(UserRegisterRequest dto, BindingResult result) {
@@ -92,23 +117,6 @@ public class IndexController {
             result.rejectValue("groupName", "group.required", "Group name is required");
         }
     }
-//
-//    @PostMapping("/login")
-//    public ModelAndView getLoginPage(@Valid @ModelAttribute UserLoginRequest userLoginRequest, BindingResult bindingResult, HttpSession session) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        if(bindingResult.hasErrors()){
-//           modelAndView.setViewName("login");
-//           return modelAndView;
-//        }
-//
-//        UserDto user = userService.login(userLoginRequest);
-//        session.setAttribute("user_id", user.getId());
-//
-//        return new ModelAndView("redirect:/home");
-//    }
-//
-//
-//
 
 //
 //    @GetMapping("/home")

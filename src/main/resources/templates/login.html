@@ -1,64 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — MealPlanner</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — MealPlanner</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar__inner">
-      <a href="home" class="navbar__brand">
-        <span class="navbar__logo" aria-hidden="true">🍽</span>
-        MealPlanner
-      </a>
-      <ul class="navbar__links">
-        <li><a href="home">Home</a></li>
-        <li><a href="dish-catalog">Dish Catalog</a></li>
-        <li><a href="log-meal">Log Meal</a></li>
-        <li><a href="my-diary">My Diary</a></li>
-        <li><a href="group-settings">Group</a></li>
-        <li><a href="admin-dishes">Admin</a></li>
-        <li><a href="login" class="active">Login</a></li>
-        <li><a href="register">Register</a></li>
-      </ul>
-    </div>
-  </nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-  <main>
+<main>
     <div class="form-card">
-      <h1>Login</h1>
-      <p class="subtitle">Welcome back! Sign in to your MealPlanner account.</p>
+        <h1>Login</h1>
+        <p class="subtitle">Welcome back! Sign in to your MealPlanner account.</p>
 
-      <form action="#" method="post">
-        <div class="form-group">
-          <label for="username-email">Username or Email</label>
-          <input
-            type="text"
-            id="username-email"
-            name="username-email"
-            placeholder="johndoe or john@example.com"
-            required
-          >
+        <div th:if="${error}" class="error-text" th:text="${error}" role="alert"></div>
+        <div th:if="${param.logout}" class="success-text" role="status">
+            You have been logged out successfully.
         </div>
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter password" required>
-        </div>
+        <form th:action="@{/login}" th:object="${loginDto}" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" placeholder="john@example.com">
+                <div th:errors="*{email}" class="error-text"></div>
+            </div>
 
-        <button type="submit" class="btn btn--primary" style="width: 100%;">Login</button>
-      </form>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}" placeholder="Enter password">
+                <div th:errors="*{password}" class="error-text"></div>
+            </div>
 
-      <p class="form-footer">
-        Don't have an account? <a href="register">Register here</a>
-      </p>
+            <button type="submit" class="btn btn--primary" style="width: 100%;">Login</button>
+        </form>
+
+        <p class="form-footer">
+            Don't have an account? <a th:href="@{/register}">Register here</a>
+        </p>
     </div>
-  </main>
+</main>
 
-  <footer class="footer">
+<footer class="footer">
     <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
-  </footer>
+</footer>
 </body>
 </html>
