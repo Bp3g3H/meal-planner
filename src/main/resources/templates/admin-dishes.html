@@ -1,166 +1,68 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — Manage Dishes — MealPlanner</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Manage Dishes — MealPlanner</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar__inner">
-      <a href="home" class="navbar__brand">
-        <span class="navbar__logo" aria-hidden="true">🍽</span>
-        MealPlanner
-      </a>
-      <ul class="navbar__links">
-        <li><a href="home">Home</a></li>
-        <li><a href="dish-catalog">Dish Catalog</a></li>
-        <li><a href="log-meal">Log Meal</a></li>
-        <li><a href="my-diary">My Diary</a></li>
-        <li><a href="group-settings">Group</a></li>
-        <li><a href="admin-dishes" class="active">Admin</a></li>
-        <li><a href="login">Login</a></li>
-        <li><a href="register">Register</a></li>
-      </ul>
-    </div>
-  </nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-  <main>
+<main>
     <header class="page-header">
-      <h1>Manage Dishes</h1>
-      <p>Admin panel — view, edit, and delete dishes in the catalog.</p>
+        <h1>Manage Dishes</h1>
+        <p>Admin panel — view, edit, and delete dishes in the catalog.</p>
     </header>
 
     <div class="admin-toolbar">
-      <p style="margin: 0; color: var(--color-text-muted);">8 dishes in catalog</p>
-      <a href="admin-dish-form" class="btn btn--primary">Add New Dish</a>
+        <p style="margin: 0; color: var(--color-text-muted);"
+           th:text="${dishes.size()} + ' dishes in catalog'"></p>
+        <a th:href="@{/admin/dishes/add}" class="btn btn--primary">Add New Dish</a>
     </div>
 
     <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Calories (Medium)</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Oatmeal with Berries</td>
-            <td><span class="badge badge--breakfast">Breakfast</span></td>
-            <td>320 kcal</td>
-            <td>Creamy steel-cut oats with fresh berries and honey.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Avocado Toast</td>
-            <td><span class="badge badge--breakfast">Breakfast</span></td>
-            <td>280 kcal</td>
-            <td>Toasted sourdough with mashed avocado and tomatoes.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Grilled Chicken Salad</td>
-            <td><span class="badge badge--lunch">Lunch</span></td>
-            <td>410 kcal</td>
-            <td>Mixed greens with grilled chicken and balsamic vinaigrette.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Pasta Primavera</td>
-            <td><span class="badge badge--lunch">Lunch</span></td>
-            <td>480 kcal</td>
-            <td>Penne with seasonal vegetables, garlic, and basil.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Baked Salmon &amp; Rice</td>
-            <td><span class="badge badge--dinner">Dinner</span></td>
-            <td>520 kcal</td>
-            <td>Baked salmon with brown rice and roasted asparagus.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>Vegetable Stir-Fry</td>
-            <td><span class="badge badge--dinner">Dinner</span></td>
-            <td>350 kcal</td>
-            <td>Bell peppers, broccoli, and snap peas in ginger-soy sauce.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>Mixed Nuts</td>
-            <td><span class="badge badge--snack">Snack</span></td>
-            <td>180 kcal</td>
-            <td>Almonds, cashews, and walnuts — protein-rich snack.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>Apple with Peanut Butter</td>
-            <td><span class="badge badge--snack">Snack</span></td>
-            <td>210 kcal</td>
-            <td>Sliced apple with a tablespoon of natural peanut butter.</td>
-            <td>
-              <div class="btn-group">
-                <a href="admin-dish-edit" class="btn btn--outline btn--sm">Edit</a>
-                <button type="button" class="btn btn--danger btn--sm">Delete</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Calories (Medium)</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dish : ${dishes}">
+                <td th:text="${#strings.abbreviate(dish.id.toString(), 8, 0)}"></td>
+                <td th:text="${dish.name}"></td>
+                <td>
+              <span class="badge"
+                    th:text="${dish.category}"
+                    th:classappend="' badge--' + ${#strings.toLowerCase(dish.category)}"></span>
+                </td>
+                <td th:text="${dish.calories} + ' kcal'"></td>
+                <td th:text="${dish.description}"></td>
+                <td>
+                    <div class="btn-group">
+                        <a th:href="@{/admin/dishes/edit/{id}(id=${dish.id})}"
+                           class="btn btn--outline btn--sm">Edit</a>
+                        <form th:action="@{/admin/dishes/delete/{id}(id=${dish.id})}"
+                              method="post"
+                              onsubmit="return confirm('Delete this dish?')">
+                            <button type="submit" class="btn btn--danger btn--sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-  </main>
+</main>
 
-  <footer class="footer">
+<footer class="footer">
     <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
-  </footer>
+</footer>
 </body>
 </html>

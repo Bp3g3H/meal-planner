@@ -5,6 +5,7 @@ import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.repository.dish.DishRepository;
+import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import java.util.UUID;
 public class DishService {
 
     private final DishRepository dishRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public DishService(DishRepository dishRepository) {
+    public DishService(DishRepository dishRepository,  UserRepository userRepository) {
         this.dishRepository = dishRepository;
+        this.userRepository = userRepository;
     }
 
     public List<DishDto> findAll() {
@@ -31,7 +34,8 @@ public class DishService {
         return DishMapper.toDishDto(dish);
     }
 
-    public DishDto create(DishDto dishDto, User user) {
+    public DishDto create(DishDto dishDto, UUID userId) {
+        User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Dish dish = Dish.builder()
                 .name(dishDto.getName())
                 .description(dishDto.getDescription())
