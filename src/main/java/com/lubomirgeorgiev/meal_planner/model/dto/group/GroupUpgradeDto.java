@@ -8,6 +8,6 @@ import lombok.Data;
 public class GroupUpgradeDto {
 
     private String name;
-    boolean isPublic;
+    boolean publicGroup;
     boolean generatePassword;
 }

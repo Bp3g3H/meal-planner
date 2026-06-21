@@ -1,185 +1,95 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Group Settings — MealPlanner</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Settings — MealPlanner</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar__inner">
-      <a href="home" class="navbar__brand">
-        <span class="navbar__logo" aria-hidden="true">🍽</span>
-        MealPlanner
-      </a>
-      <ul class="navbar__links">
-        <li><a href="home">Home</a></li>
-        <li><a href="dish-catalog">Dish Catalog</a></li>
-        <li><a href="log-meal">Log Meal</a></li>
-        <li><a href="my-diary">My Diary</a></li>
-        <li><a href="group-settings" class="active">Group</a></li>
-        <li><a href="admin-dishes">Admin</a></li>
-        <li><a href="login">Login</a></li>
-        <li><a href="register">Register</a></li>
-      </ul>
-    </div>
-  </nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-  <main>
+<main>
     <header class="page-header">
-      <h1>Group Settings</h1>
-      <p>View and manage your shared meal diary group.</p>
+        <h1>Group Settings</h1>
+        <p>View and manage your shared meal diary group.</p>
     </header>
 
-    <p class="prototype-note">
-      Static prototype: default view = member of an existing group.
-      Add <code>?state=upgrade</code> to the URL to preview the
-      first-time setup form (after choosing &ldquo;Continue without&rdquo; at register).
-    </p>
+    <div th:if="${rawJoinCode}" class="success-banner">
+        <p>Save this join code now — it won't be shown again:</p>
+        <strong class="success-banner__code" th:text="${rawJoinCode}"></strong>
+    </div>
 
-    <!-- State: user already belongs to a real group (Read + Update) -->
-    <section id="manage-state">
-      <div class="success-banner" id="join-code-banner" hidden>
-        <p>Save this join code now — it won&rsquo;t be shown again:</p>
-        <strong class="success-banner__code">XK7P-9M2Q</strong>
-      </div>
-
-      <div class="info-card">
-        <h2 class="section-title">Your Group</h2>
-        <dl class="group-info">
-          <div class="group-info__row">
-            <dt>Name</dt>
-            <dd>Smith Family Meals</dd>
-          </div>
-          <div class="group-info__row">
-            <dt>Visibility</dt>
-            <dd>Private — join by name and password</dd>
-          </div>
-          <div class="group-info__row">
-            <dt>Members</dt>
-            <dd>3 (johndoe, janedoe, alexsmith)</dd>
-          </div>
-          <div class="group-info__row">
-            <dt>Your role</dt>
-            <dd>Member (joined Jun 5, 2026)</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div class="form-card form-card--wide">
-        <h2 class="section-title">Update Group</h2>
-        <p class="subtitle">Change the group name or privacy settings.</p>
-
-        <form action="#" method="post">
-          <div class="form-group">
-            <label for="update-group-name">Group Name</label>
-            <input
-              type="text"
-              id="update-group-name"
-              name="group-name"
-              value="Smith Family Meals"
-              required
-            >
-          </div>
-
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" id="update-is-public" name="is-public">
-              Public group (anyone can join by name, no password)
-            </label>
-          </div>
-
-          <div class="form-group" id="password-options">
-            <label class="checkbox-label">
-              <input type="checkbox" id="regenerate-password" name="regenerate-password">
-              Generate a new join password
-            </label>
-            <p class="hint">
-              Existing passwords cannot be displayed. Check this to create a
-              new code for future members.
+    <section th:if="${groupDto.dummy}">
+        <div class="form-card form-card--wide">
+            <h2 class="section-title">Set Up Your Group</h2>
+            <p class="subtitle">
+                You chose "Continue without" when you registered. Create your group here.
             </p>
-          </div>
 
-          <button type="submit" class="btn btn--primary">Save Changes</button>
-        </form>
-      </div>
+            <form th:action="@{/group/upgrade}" th:object="${groupUpgradeDto}" method="post">
+                <div class="form-group">
+                    <label for="name">Group Name</label>
+                    <input type="text" id="name" th:field="*{name}"
+                           placeholder="e.g. Smith Family Meals">
+                    <div th:errors="*{name}" class="error-text"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" th:field="*{publicGroup}">
+                        Public group (anyone can join by name, no password)
+                    </label>
+                </div>
+
+                <div class="form-group" id="upgrade-password-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" th:field="*{generatePassword}">
+                        Generate a join password (private groups only)
+                    </label>
+                    <p class="hint">If unchecked, members join using only the group name.</p>
+                </div>
+
+                <button type="submit" class="btn btn--primary">Create Group</button>
+            </form>
+        </div>
     </section>
 
-    <!-- State: dummy group — first-time setup (Create via upgrade) -->
-    <section id="upgrade-state" hidden>
-      <div class="form-card form-card--wide">
-        <h2 class="section-title">Set Up Your Group</h2>
-        <p class="subtitle">
-          You chose &ldquo;Continue without&rdquo; when you registered. Create
-          your group here.
-        </p>
-
-        <form action="#" method="post">
-          <div class="form-group">
-            <label for="group-name">Group Name</label>
-            <input
-              type="text"
-              id="group-name"
-              name="group-name"
-              placeholder="e.g. Smith Family Meals"
-              required
-            >
-          </div>
-
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" id="is-public" name="is-public">
-              Public group (anyone can join by name, no password)
-            </label>
-          </div>
-
-          <div class="form-group" id="upgrade-password-options">
-            <label class="checkbox-label">
-              <input type="checkbox" id="generate-password" name="generate-password">
-              Generate a join password (private groups only)
-            </label>
-            <p class="hint">If unchecked, members join using only the group name.</p>
-          </div>
-
-          <button type="submit" class="btn btn--primary">Create Group</button>
-        </form>
-      </div>
+    <section th:if="${!groupDto.dummy}">
+        <div class="info-card">
+            <h2 class="section-title">Your Group</h2>
+            <dl class="group-info">
+                <div class="group-info__row">
+                    <dt>Name</dt>
+                    <dd th:text="${groupDto.name}"></dd>
+                </div>
+                <div class="group-info__row">
+                    <dt>Visibility</dt>
+                    <dd th:if="${groupDto.publicGroup}">Public — anyone can join by name</dd>
+                    <dd th:if="${!groupDto.publicGroup and groupDto.hasPassword}">Private — join by name and password</dd>
+                    <dd th:if="${!groupDto.publicGroup and !groupDto.hasPassword}">Private — join by name only</dd>
+                </div>
+            </dl>
+        </div>
     </section>
-  </main>
+</main>
 
-  <footer class="footer">
+<footer class="footer">
     <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
-  </footer>
+</footer>
 
-  <script>
-    const isUpgrade = new URLSearchParams(window.location.search).get('state') === 'upgrade';
-
-    document.getElementById('manage-state').hidden = isUpgrade;
-    document.getElementById('upgrade-state').hidden = !isUpgrade;
-
-    function togglePasswordOptions(isPublicCheckbox, passwordSection) {
-      passwordSection.style.display = isPublicCheckbox.checked ? 'none' : 'block';
-    }
-
-    const updatePublic = document.getElementById('update-is-public');
-    const updatePasswordOptions = document.getElementById('password-options');
-    const upgradePublic = document.getElementById('is-public');
+<script>
+    const upgradePublic = document.getElementById('isPublic');
     const upgradePasswordOptions = document.getElementById('upgrade-password-options');
 
-    updatePublic.addEventListener('change', () => {
-      togglePasswordOptions(updatePublic, updatePasswordOptions);
-    });
-    upgradePublic.addEventListener('change', () => {
-      togglePasswordOptions(upgradePublic, upgradePasswordOptions);
-    });
+    if (upgradePublic && upgradePasswordOptions) {
+        function togglePasswordOptions() {
+            upgradePasswordOptions.style.display = upgradePublic.checked ? 'none' : 'block';
+        }
 
-    togglePasswordOptions(updatePublic, updatePasswordOptions);
-    togglePasswordOptions(upgradePublic, upgradePasswordOptions);
-
-    if (new URLSearchParams(window.location.search).get('code') === 'shown') {
-      document.getElementById('join-code-banner').hidden = false;
+        upgradePublic.addEventListener('change', togglePasswordOptions);
+        togglePasswordOptions();
     }
-  </script>
+</script>
 </body>
 </html>

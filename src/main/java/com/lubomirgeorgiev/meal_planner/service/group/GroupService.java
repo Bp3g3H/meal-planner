@@ -80,9 +80,9 @@ public class GroupService {
 
         group.setName(groupUpgradeDto.getName());
         group.setDummy(false);
-        group.setPublic(groupUpgradeDto.isPublic());
+        group.setPublic(groupUpgradeDto.isPublicGroup());
 
-        if (!groupUpgradeDto.isPublic() && groupUpgradeDto.isGeneratePassword()) {
+        if (!groupUpgradeDto.isPublicGroup() && groupUpgradeDto.isGeneratePassword()) {
             String rawCode = generateEightDigitCode();
             group.setPassword(passwordEncoder.encode(rawCode));
         }
