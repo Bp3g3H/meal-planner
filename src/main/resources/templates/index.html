@@ -16,11 +16,11 @@
             Your personal meal planner and food diary. Track what you eat,
             discover new dishes, and stay on top of your nutrition goals.
         </p>
-        <div class="hero__actions" th:unless="${isLoggedIn}">
+        <div class="hero__actions" th:unless="${session.user_id != null}">
             <a th:href="@{/login}" class="btn btn--secondary">Login</a>
             <a th:href="@{/register}" class="btn btn--primary">Register</a>
         </div>
-        <div class="hero__actions" th:if="${isLoggedIn}">
+        <div class="hero__actions" th:if="${session.user_id != null}">
             <a th:href="@{/meals/diary}" class="btn btn--primary">Go to My Diary</a>
             <a th:href="@{/dishes}" class="btn btn--secondary">Browse Dishes</a>
         </div>

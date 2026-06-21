@@ -14,8 +14,8 @@ import java.util.UUID;
 @Component
 public class SessionInterceptor implements HandlerInterceptor {
 
-    private static final Set<String> UNAUTHENTICATED_ENDPOINTS = Set.of("/", "/home", "/login", "/register", "/error");
-    private static final Set<String> ADMIN_ENDPOINTS = Set.of("/users");
+    private static final Set<String> UNAUTHENTICATED_ENDPOINTS = Set.of("/", "/home", "/dishes", "/login", "/register", "/error");
+    private static final String ADMIN_PREFIX_ENDPOINTS ="/admin";
     private final UserService userService;
 
     public SessionInterceptor(UserService userService) {
@@ -49,7 +49,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
         UserDto userDto = userService.getById(userId);
 
-        if (ADMIN_ENDPOINTS.contains(endpoints) && !userDto.getRole().name().equals("ADMIN")) {
+        if (endpoints.startsWith(ADMIN_PREFIX_ENDPOINTS) && !userDto.getRole().name().equals("ADMIN")) {
             httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
             httpServletResponse.getWriter().write("You do not have permission to access this resource");
             return false;

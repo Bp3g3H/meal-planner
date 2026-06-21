@@ -20,21 +20,6 @@
         </p>
     </header>
 
-<!--    <div class="diary-summary">-->
-<!--        <div class="summary-card">-->
-<!--            <div class="summary-card__value" th:text="${summary.totalCaloriesToday}"></div>-->
-<!--            <div class="summary-card__label">kcal today</div>-->
-<!--        </div>-->
-<!--        <div class="summary-card">-->
-<!--            <div class="summary-card__value" th:text="${summary.mealsLoggedToday}"></div>-->
-<!--            <div class="summary-card__label">meals logged today</div>-->
-<!--        </div>-->
-<!--        <div class="summary-card">-->
-<!--            <div class="summary-card__value" th:text="${summary.totalEntriesThisWeek}"></div>-->
-<!--            <div class="summary-card__label">total entries this week</div>-->
-<!--        </div>-->
-<!--    </div>-->
-
     <p th:if="${mealLogs.isEmpty()}" class="prototype-note">
         No meals logged yet. <a th:href="@{/meals/log}">Log your first meal</a>.
     </p>
