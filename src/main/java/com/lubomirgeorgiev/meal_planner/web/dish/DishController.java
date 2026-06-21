@@ -3,7 +3,6 @@ package com.lubomirgeorgiev.meal_planner.web.dish;
 import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.DishCategory;
 import com.lubomirgeorgiev.meal_planner.service.dish.DishService;
-import com.lubomirgeorgiev.meal_planner.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -20,11 +19,9 @@ import java.util.UUID;
 public class DishController {
 
     private DishService dishService;
-    private UserService userService;
 
-    public DishController(DishService dishService,  UserService userService) {
+    public DishController(DishService dishService) {
         this.dishService = dishService;
-        this.userService = userService;
     }
 
     @GetMapping("/dishes")
