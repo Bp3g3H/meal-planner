@@ -79,17 +79,19 @@
 </footer>
 
 <script>
-    const upgradePublic = document.getElementById('isPublic');
-    const upgradePasswordOptions = document.getElementById('upgrade-password-options');
+    document.addEventListener('DOMContentLoaded', function () {
+        const upgradePublic = document.getElementById('publicGroup1');
+        const upgradePasswordOptions = document.getElementById('upgrade-password-options');
 
-    if (upgradePublic && upgradePasswordOptions) {
-        function togglePasswordOptions() {
-            upgradePasswordOptions.style.display = upgradePublic.checked ? 'none' : 'block';
+        if (upgradePublic && upgradePasswordOptions) {
+            function togglePasswordOptions() {
+                upgradePasswordOptions.style.display = upgradePublic.checked ? 'none' : 'block';
+            }
+
+            upgradePublic.addEventListener('change', togglePasswordOptions);
+            togglePasswordOptions();
         }
-
-        upgradePublic.addEventListener('change', togglePasswordOptions);
-        togglePasswordOptions();
-    }
+    });
 </script>
 </body>
 </html>

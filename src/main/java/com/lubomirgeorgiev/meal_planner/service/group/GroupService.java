@@ -3,6 +3,7 @@ package com.lubomirgeorgiev.meal_planner.service.group;
 import com.lubomirgeorgiev.meal_planner.exception.GroupNameTakenException;
 import com.lubomirgeorgiev.meal_planner.exception.GroupNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.InvalidGroupPasswordException;
+import com.lubomirgeorgiev.meal_planner.mapper.group.GroupMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.group.GroupUpgradeDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
 import com.lubomirgeorgiev.meal_planner.repository.group.GroupRepository;
@@ -66,7 +67,7 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-    public Group upgradeDummyGroup(UUID groupId, GroupUpgradeDto groupUpgradeDto, UUID userId) {
+    public GroupUpgradeResult upgradeDummyGroup(UUID groupId, GroupUpgradeDto groupUpgradeDto, UUID userId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(GroupNotFoundException::new);
 
@@ -74,7 +75,7 @@ public class GroupService {
             throw new IllegalStateException("(Group is already upgraded");
         }
 
-        if (groupRepository.existsByName(group.getName())) {
+        if (groupRepository.existsByName(groupUpgradeDto.getName())) {
             throw new GroupNameTakenException("Group already exists");
         }
 
@@ -82,12 +83,16 @@ public class GroupService {
         group.setDummy(false);
         group.setPublic(groupUpgradeDto.isPublicGroup());
 
+        String rawCode = null;
         if (!groupUpgradeDto.isPublicGroup() && groupUpgradeDto.isGeneratePassword()) {
-            String rawCode = generateEightDigitCode();
+            rawCode = generateEightDigitCode();
             group.setPassword(passwordEncoder.encode(rawCode));
+        } else {
+            group.setPassword(null);
         }
 
-        return groupRepository.save(group);
+        Group savedGroup = groupRepository.save(group);
+        return new GroupUpgradeResult(GroupMapper.toGroupDto(savedGroup), rawCode);
     }
 
     private String generateEightDigitCode() {
