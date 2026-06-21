@@ -70,6 +70,16 @@ public class DishController {
         return modelAndView;
     }
 
+    @PostMapping("/admin/dishes/edit/{id}")
+    public ModelAndView updateDish(@PathVariable UUID id, @Valid @ModelAttribute DishFormRequest dishFormRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("admin-dish-edit");
+            modelAndView.addObject("dishCategories", DishCategory.values());
+            modelAndView.addObject("dishId", id);
+            return modelAndView;
+        }
 
-
+        dishService.update(id, dishFormRequest);
+        return new ModelAndView("redirect:/admin/dishes");
+    }
 }
