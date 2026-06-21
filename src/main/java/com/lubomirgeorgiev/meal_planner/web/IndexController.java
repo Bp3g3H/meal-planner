@@ -108,6 +108,12 @@ public class IndexController {
         return new ModelAndView("redirect:/dishes");
     }
 
+    @GetMapping("/logout")
+    public ModelAndView getLogoutPage(HttpSession session) {
+        session.invalidate();
+        return new ModelAndView("redirect:/home");
+    }
+
     private void validateGroupFields(UserRegisterRequest dto, BindingResult result) {
         if (dto.getGroupChoice() == GroupChoice.NONE) {
             return;
@@ -116,11 +122,5 @@ public class IndexController {
         if (dto.getGroupName() == null || dto.getGroupName().isBlank()) {
             result.rejectValue("groupName", "group.required", "Group name is required");
         }
-    }
-
-    @GetMapping("/logout")
-    public ModelAndView getLogoutPage(HttpSession session) {
-        session.invalidate();
-        return new ModelAndView("redirect:/home");
     }
 }
