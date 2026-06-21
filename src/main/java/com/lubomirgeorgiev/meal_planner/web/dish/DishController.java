@@ -82,4 +82,10 @@ public class DishController {
         dishService.update(id, dishFormRequest);
         return new ModelAndView("redirect:/admin/dishes");
     }
+
+    @PostMapping("/admin/dishes/delete/{id}")
+    public ModelAndView delete(@PathVariable UUID id) {
+        dishService.deleteById(id);
+        return new ModelAndView("redirect:/admin/dishes");
+    }
 }
