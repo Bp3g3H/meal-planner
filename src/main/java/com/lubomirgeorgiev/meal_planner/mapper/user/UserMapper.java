@@ -1,5 +1,6 @@
 package com.lubomirgeorgiev.meal_planner.mapper.user;
 
+import com.lubomirgeorgiev.meal_planner.mapper.group.GroupMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
@@ -17,6 +18,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .createdOn(user.getCreatedOn())
+                .group(GroupMapper.toGroupDto(user.getGroup()))
                 .build();
     }
 

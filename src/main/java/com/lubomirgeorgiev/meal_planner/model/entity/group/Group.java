@@ -31,4 +31,8 @@ public class Group {
     private boolean isPublic;
     @CreationTimestamp
     private LocalDateTime createdOn;
+
+    public boolean hasPassword() {
+        return password != null;
+    }
 }

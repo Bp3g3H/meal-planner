@@ -1,5 +1,6 @@
 package com.lubomirgeorgiev.meal_planner.model.dto.user;
 
+import com.lubomirgeorgiev.meal_planner.model.dto.group.GroupDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.UserRole;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class UserDto {
     private String email;
     private UserRole role;
     private LocalDateTime createdOn;
+    private GroupDto group;
 }
