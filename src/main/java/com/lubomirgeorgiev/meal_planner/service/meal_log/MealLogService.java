@@ -69,17 +69,17 @@ public class MealLogService {
         return MealLogMapper.toMealFormRequest(log);
     }
 
-    public MealLog updateMeal(UUID id, MealLogDto mealLogDto, UUID userId) {
+    public MealLogDto updateMeal(UUID id, MealFormRequest mealFormRequest, UUID userId) {
         MealLog log = findByIdAndUser(id, userId);
-        Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new DishNotFoundException(mealLogDto.getDishId()));
+        Dish dish = dishRepository.findById(mealFormRequest.getDishId()).orElseThrow(() -> new DishNotFoundException(mealFormRequest.getDishId()));
 
         log.setDish(dish);
-        log.setMealType(mealLogDto.getMealType());
-        log.setPortionSize(mealLogDto.getPortionSize());
-        log.setLoggedInOn(mealLogDto.getLoggedInOn());
-        log.setNotes(mealLogDto.getNotes());
+        log.setMealType(mealFormRequest.getMealType());
+        log.setPortionSize(mealFormRequest.getPortionSize());
+        log.setLoggedInOn(LocalDateTime.now());
+        log.setNotes(mealFormRequest.getNotes());
         mealLogRepository.save(log);
-        return log;
+        return MealLogMapper.toMealLogDto(log);
     }
 
     public List<MealLogRepresentation> findByGroup(UUID userId) {

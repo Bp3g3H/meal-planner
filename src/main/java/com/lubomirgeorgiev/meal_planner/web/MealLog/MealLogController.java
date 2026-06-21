@@ -1,5 +1,7 @@
 package com.lubomirgeorgiev.meal_planner.web.MealLog;
 
+import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
+import com.lubomirgeorgiev.meal_planner.exception.MealLogNotFoundException;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogRepresentation;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
@@ -67,6 +69,40 @@ public class MealLogController {
         modelAndView.addObject("mealTypes", MealType.values());
         modelAndView.addObject("mealPortionSizes", MealPortionSize.values());
         return modelAndView;
+    }
+
+    @PostMapping("/{id}/edit")
+    public ModelAndView editMeal(
+            @PathVariable UUID id,
+            @Valid @ModelAttribute("mealFormRequest") MealFormRequest mealFormRequest,
+            BindingResult result,
+            HttpSession session) {
+
+
+        if (result.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("edit-meal");
+            modelAndView.addObject("dishes", dishService.findAll());
+            modelAndView.addObject("mealLogId", id);
+            modelAndView.addObject("mealTypes", MealType.values());
+            modelAndView.addObject("mealPortionSizes", MealPortionSize.values());
+            return modelAndView;
+        }
+
+        try {
+            mealLogService.updateMeal(id, mealFormRequest, (UUID) session.getAttribute("user_id"));
+        } catch (DishNotFoundException ex) {
+            result.rejectValue("dishId", "dish.notfound", ex.getMessage());
+            ModelAndView modelAndView = new ModelAndView("edit-meal");
+            modelAndView.addObject("dishes", dishService.findAll());
+            modelAndView.addObject("mealLogId", id);
+            modelAndView.addObject("mealTypes", MealType.values());
+            modelAndView.addObject("mealPortionSizes", MealPortionSize.values());
+            return modelAndView;
+        } catch (MealLogNotFoundException ex) {
+            throw ex;
+        }
+
+        return new ModelAndView("redirect:/meals/diary");
     }
 
     @GetMapping("/diary")

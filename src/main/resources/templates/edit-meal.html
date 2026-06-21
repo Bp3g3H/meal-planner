@@ -39,7 +39,7 @@
 
             <div class="form-group">
                 <label for="loggedInOn">Date</label>
-                <input type="date" id="loggedInOn" th:field="*{loggedInOn}">
+                <input type="date" id="loggedInOn" th:field="*{loggedInOn}" readonly>
                 <div th:errors="*{loggedInOn}" class="error-text"></div>
             </div>
 
