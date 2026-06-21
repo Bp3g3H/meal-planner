@@ -30,11 +30,6 @@ public class DishService {
         return dishRepository.findAllByOrderByNameAsc().stream().map(DishMapper::toDishDto).toList();
     }
 
-    public DishDto findById(UUID id) {
-        Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
-        return DishMapper.toDishDto(dish);
-    }
-
     public DishFormRequest findByIdToFormDto(UUID id) {
         Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
         return DishMapper.toDishCreateRequest(dish);
