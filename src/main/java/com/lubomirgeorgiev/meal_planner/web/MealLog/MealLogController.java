@@ -117,4 +117,10 @@ public class MealLogController {
         modelAndView.addObject("currentUserId", currentUser.getId());
         return modelAndView;
     }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable UUID id, HttpSession session) {
+        mealLogService.delete(id, (UUID) session.getAttribute("user_id"));
+        return "redirect:/meals/diary";
+    }
 }
