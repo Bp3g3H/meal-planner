@@ -14,7 +14,7 @@
         <h1>Add New Dish</h1>
         <p class="subtitle">Create a new dish and add it to the catalog.</p>
 
-        <form th:action="@{/admin/dishes/add}" th:object="${dishDto}" method="post">
+        <form th:action="@{/admin/dishes/add}" th:object="${dishFormRequest}" method="post">
             <div class="form-group">
                 <label for="name">Dish Name</label>
                 <input type="text" id="name" th:field="*{name}" placeholder="e.g. Greek Yogurt Parfait">

@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DishCreateRequest {
+public class DishFormRequest {
 
     @NotBlank
     @Size(max = 100)
