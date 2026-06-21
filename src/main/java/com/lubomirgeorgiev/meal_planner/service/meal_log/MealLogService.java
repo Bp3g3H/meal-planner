@@ -64,9 +64,13 @@ public class MealLogService {
         return log;
     }
 
+    public MealFormRequest getMealFormRequestByIdAndUser(UUID id, UUID userId) {
+        MealLog log = mealLogRepository.findById(id).orElseThrow(() -> new MealLogNotFoundException(id));
+        return MealLogMapper.toMealFormRequest(log);
+    }
+
     public MealLog updateMeal(UUID id, MealLogDto mealLogDto, UUID userId) {
         MealLog log = findByIdAndUser(id, userId);
-        // TODO change DishNotFoundException
         Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new DishNotFoundException(mealLogDto.getDishId()));
 
         log.setDish(dish);

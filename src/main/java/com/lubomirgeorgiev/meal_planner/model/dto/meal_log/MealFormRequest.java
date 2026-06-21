@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -21,7 +22,8 @@ public class MealFormRequest {
     @NotNull
     private MealPortionSize portionSize;
     @NotNull
-    private LocalDate loggedAt;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate loggedInOn;
     @Size(max = 500)
     private String notes;
 }

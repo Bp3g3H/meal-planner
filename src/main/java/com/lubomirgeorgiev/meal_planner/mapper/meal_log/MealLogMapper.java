@@ -1,5 +1,6 @@
 package com.lubomirgeorgiev.meal_planner.mapper.meal_log;
 
+import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogRepresentation;
 import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealLog;
@@ -30,6 +31,16 @@ public class MealLogMapper {
                 .portionSize(log.getPortionSize())
                 .loggedInOn(log.getLoggedInOn().toLocalDate())
                 .notes(log.getNotes())
+                .build();
+    }
+
+    public static MealFormRequest toMealFormRequest(MealLog mealLog) {
+        return MealFormRequest.builder()
+                .dishId(mealLog.getDish().getId())
+                .mealType(mealLog.getMealType())
+                .portionSize(mealLog.getPortionSize())
+                .notes(mealLog.getNotes())
+                .loggedInOn(mealLog.getLoggedInOn().toLocalDate())
                 .build();
     }
 }

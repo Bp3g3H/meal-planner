@@ -12,10 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -61,6 +58,17 @@ public class MealLogController {
         return new ModelAndView("redirect:/meals/diary");
     }
 
+    @GetMapping("/{id}/edit")
+    public ModelAndView getEditLogPage(@PathVariable UUID id, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView("edit-meal");
+        modelAndView.addObject("mealFormRequest", mealLogService.getMealFormRequestByIdAndUser(id, (UUID) session.getAttribute("user_id")));
+        modelAndView.addObject("dishes", dishService.findAll());
+        modelAndView.addObject("mealLogId", id);
+        modelAndView.addObject("mealTypes", MealType.values());
+        modelAndView.addObject("mealPortionSizes", MealPortionSize.values());
+        return modelAndView;
+    }
+
     @GetMapping("/diary")
     public ModelAndView diary(HttpSession session) {
         UserDto currentUser = userService.getById((UUID) session.getAttribute("user_id"));
@@ -70,6 +78,7 @@ public class MealLogController {
         modelAndView.addObject("mealLogsByDate", mealLogService.groupByDate(logs));
         modelAndView.addObject("group", currentUser.getGroup());
         modelAndView.addObject("username", currentUser.getUsername());
+        modelAndView.addObject("currentUserId", currentUser.getId());
         return modelAndView;
     }
 }
