@@ -3,7 +3,10 @@ package com.lubomirgeorgiev.meal_planner.service.meal_log;
 import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.MealLogNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
+import com.lubomirgeorgiev.meal_planner.mapper.meal_log.MealLogMapper;
+import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogRepresentation;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealLog;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
@@ -12,8 +15,13 @@ import com.lubomirgeorgiev.meal_planner.repository.meal_log.MealLogRepository;
 import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MealLogService {
@@ -28,22 +36,22 @@ public class MealLogService {
         this.dishRepository = dishRepository;
     }
 
-    public MealLog logMeal(MealLogDto mealLogDto, UUID userId) {
+    public MealLogDto logMeal(MealFormRequest mealFormRequest, UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserAlreadyExistsException("User not found"));
 
-        Dish dish = dishRepository.findById(mealLogDto.getDishId()).orElseThrow(() -> new DishNotFoundException(mealLogDto.getDishId()));
+        Dish dish = dishRepository.findById(mealFormRequest.getDishId()).orElseThrow(() -> new DishNotFoundException(mealFormRequest.getDishId()));
 
         MealLog mealLog = MealLog.builder()
                 .user(user)
                 .dish(dish)
-                .mealType(mealLogDto.getMealType())
-                .portionSize(mealLogDto.getPortionSize())
-                .loggedInOn(mealLogDto.getLoggedInOn())
-                .notes(mealLogDto.getNotes())
+                .mealType(mealFormRequest.getMealType())
+                .portionSize(mealFormRequest.getPortionSize())
+                .loggedInOn(LocalDateTime.now())
+                .notes(mealFormRequest.getNotes())
                 .build();
 
         mealLogRepository.save(mealLog);
-        return mealLog;
+        return MealLogMapper.toMealLogDto(mealLog);
     }
 
     public MealLog findByIdAndUser(UUID id, UUID userId) {
@@ -70,17 +78,23 @@ public class MealLogService {
         return log;
     }
 
-    public List<MealLog> findByGroup(UUID userId) {
+    public List<MealLogRepresentation> findByGroup(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         List<MealLog> logs = mealLogRepository.findByUserGroupOrderByLoggedInOnDesc(user.getGroup());
 
-        return logs;
+        return logs.stream().map(MealLogMapper::toRepresentation).toList();
+    }
+
+    public Map<LocalDate, List<MealLogRepresentation>> groupByDate(List<MealLogRepresentation> logs) {
+        return logs.stream()
+                .collect(Collectors.groupingBy(
+                        MealLogRepresentation::getLoggedInOn,
+                        LinkedHashMap::new,
+                        Collectors.toList()));
     }
 
     public void delete(UUID id, UUID userId) {
         MealLog mealLog = findByIdAndUser(id, userId);
         mealLogRepository.delete(mealLog);
     }
-
-    //TODO add getSummaryForGroup
 }

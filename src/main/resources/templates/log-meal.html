@@ -14,7 +14,7 @@
         <h1>Log a Meal</h1>
         <p class="subtitle">Record what you ate and add it to your food diary.</p>
 
-        <form th:action="@{/meals/log}" th:object="${mealLogFormRequest}" method="post">
+        <form th:action="@{/meals/log}" th:object="${mealFormRequest}" method="post">
             <div class="form-group">
                 <label for="dishId">Dish</label>
                 <select id="dishId" th:field="*{dishId}">
