@@ -29,7 +29,7 @@
         <a th:href="@{/register}">Register</a>
       </li>
       <li th:if="${session.user_id != null}">
-        <form th:action="@{/logout}" method="post" class="navbar__logout-form">
+        <form th:action="@{/logout}" method="get" class="navbar__logout-form">
           <button type="submit" class="navbar__logout-btn">Logout</button>
         </form>
       </li>

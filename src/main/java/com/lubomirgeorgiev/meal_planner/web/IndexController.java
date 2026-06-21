@@ -118,19 +118,9 @@ public class IndexController {
         }
     }
 
-//
-//    @GetMapping("/home")
-//    public ModelAndView getHomePage(HttpSession session) {
-//        UserDto userDto = userService.getById((UUID) session.getAttribute("user_id"));
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("home");
-//        modelAndView.addObject("user", userDto);
-//        return modelAndView;
-//    }
-//
-//    @GetMapping("/logout")
-//    public ModelAndView getLogoutPage(HttpSession session) {
-//        session.invalidate();
-//        return new ModelAndView("redirect:/");
-//    }
+    @GetMapping("/logout")
+    public ModelAndView getLogoutPage(HttpSession session) {
+        session.invalidate();
+        return new ModelAndView("redirect:/home");
+    }
 }
