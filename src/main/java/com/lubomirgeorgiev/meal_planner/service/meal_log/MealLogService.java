@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class MealLogService {
                 .dish(dish)
                 .mealType(mealFormRequest.getMealType())
                 .portionSize(mealFormRequest.getPortionSize())
-                .loggedInOn(LocalDateTime.now())
+                .loggedInOn(mealFormRequest.getLoggedInOn().atTime(LocalTime.now()))
                 .notes(mealFormRequest.getNotes())
                 .build();
 
