@@ -36,5 +36,5 @@ public class MealLog {
     private String notes;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PortionSize portionSize;
+    private MealPortionSize portionSize;
 }
