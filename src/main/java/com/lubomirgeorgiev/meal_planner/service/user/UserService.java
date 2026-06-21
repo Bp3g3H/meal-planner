@@ -62,6 +62,7 @@ public class UserService {
         return UserMapper.toUserDto(user);
     }
 
+    @Transactional(readOnly = true)
     public UserDto getById(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return UserMapper.toUserDto(user);
