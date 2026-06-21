@@ -1,6 +1,6 @@
 package com.lubomirgeorgiev.meal_planner.web.dish;
 
-import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishCreateRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.DishCategory;
 import com.lubomirgeorgiev.meal_planner.service.dish.DishService;
 import com.lubomirgeorgiev.meal_planner.service.user.UserService;
@@ -43,18 +43,20 @@ public class DishController {
     @GetMapping("/admin/dishes/add")
     public ModelAndView getAddForm() {
         ModelAndView modelAndView = new ModelAndView("admin-dish-form");
-        modelAndView.addObject("dishDto", DishDto.builder().build());
+        modelAndView.addObject("dishCreateForm", DishCreateRequest.builder().build());
         modelAndView.addObject("dishCategories", DishCategory.values());
         return modelAndView;
     }
 
-    @PostMapping("/admin/add")
-    public ModelAndView createDish(@Valid @ModelAttribute DishDto dishDto, BindingResult bindingResult, HttpSession session) {
+    @PostMapping("/admin/dishes/add")
+    public ModelAndView createDish(@Valid @ModelAttribute DishCreateRequest dishCreateForm, BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin-dish-form");
+            ModelAndView modelAndView = new ModelAndView("admin-dish-form");
+            modelAndView.addObject("dishCategories", DishCategory.values());
+            return modelAndView;
         }
 
-        dishService.create(dishDto, (UUID) session.getAttribute("user_id"));
+        dishService.create(dishCreateForm, (UUID) session.getAttribute("user_id"));
         return new ModelAndView("redirect:/admin/dishes");
     }
 

@@ -1,6 +1,7 @@
 package com.lubomirgeorgiev.meal_planner.service.dish;
 
 import com.lubomirgeorgiev.meal_planner.mapper.dish.DishMapper;
+import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishCreateRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
@@ -34,14 +35,14 @@ public class DishService {
         return DishMapper.toDishDto(dish);
     }
 
-    public DishDto create(DishDto dishDto, UUID userId) {
+    public DishDto create(DishCreateRequest dishCreateForm, UUID userId) {
         User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Dish dish = Dish.builder()
-                .name(dishDto.getName())
-                .description(dishDto.getDescription())
-                .calories(dishDto.getCalories())
-                .category(dishDto.getCategory())
-                .imageUrl(dishDto.getImageUrl())
+                .name(dishCreateForm.getName())
+                .description(dishCreateForm.getDescription())
+                .calories(dishCreateForm.getCalories())
+                .category(dishCreateForm.getCategory())
+                .imageUrl(dishCreateForm.getImageUrl())
                 .createdBy(user)
                 .createdOn(LocalDateTime.now())
                 .build();
@@ -49,14 +50,14 @@ public class DishService {
         return DishMapper.toDishDto(dish);
     }
 
-    public DishDto update(UUID id, DishDto dishDto) {
+    public DishDto update(UUID id, DishCreateRequest dishCreateRequest) {
         Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
 
-        dish.setName(dishDto.getName());
-        dish.setDescription(dishDto.getDescription());
-        dish.setCalories(dishDto.getCalories());
-        dish.setCategory(dishDto.getCategory());
-        dish.setImageUrl(dishDto.getImageUrl());
+        dish.setName(dishCreateRequest.getName());
+        dish.setDescription(dishCreateRequest.getDescription());
+        dish.setCalories(dishCreateRequest.getCalories());
+        dish.setCategory(dishCreateRequest.getCategory());
+        dish.setImageUrl(dishCreateRequest.getImageUrl());
 
         Dish savedDish = dishRepository.save(dish);
         return DishMapper.toDishDto(savedDish);

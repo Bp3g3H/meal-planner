@@ -35,7 +35,7 @@
             </thead>
             <tbody>
             <tr th:each="dish : ${dishes}">
-                <td th:text="${#strings.abbreviate(dish.id.toString(), 8, 0)}"></td>
+                <td th:text="${#strings.abbreviate(dish.id.toString(), 8)}"></td>
                 <td th:text="${dish.name}"></td>
                 <td>
               <span class="badge"
