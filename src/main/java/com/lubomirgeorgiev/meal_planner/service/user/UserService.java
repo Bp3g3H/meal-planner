@@ -1,7 +1,9 @@
 package com.lubomirgeorgiev.meal_planner.service.user;
 
 import com.lubomirgeorgiev.meal_planner.exception.InvalidCredentialsException;
+import com.lubomirgeorgiev.meal_planner.exception.PasswordDoesNotMatchException;
 import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
+import com.lubomirgeorgiev.meal_planner.exception.UserNotFoundException;
 import com.lubomirgeorgiev.meal_planner.mapper.user.UserMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.LoginDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
@@ -35,11 +37,11 @@ public class UserService {
     @Transactional
     public UserDto register (UserRegisterRequest registerDto) {
         if (userRepository.existsByEmail(registerDto.getEmail()) || userRepository.existsByUsername(registerDto.getUsername())) {
-            throw new UserAlreadyExistsException("User already exists");
+            throw new UserAlreadyExistsException();
         }
 
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
-            throw new RuntimeException("Passwords do not match");
+            throw new PasswordDoesNotMatchException();
         }
         Group group = null;
         if (registerDto.getGroupChoice().equals(GroupChoice.CREATE)) {
@@ -64,7 +66,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDto getById(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return UserMapper.toUserDto(user);
     }
 

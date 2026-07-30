@@ -2,7 +2,7 @@ package com.lubomirgeorgiev.meal_planner.service.meal_log;
 
 import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.MealLogNotFoundException;
-import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
+import com.lubomirgeorgiev.meal_planner.exception.UserNotFoundException;
 import com.lubomirgeorgiev.meal_planner.mapper.meal_log.MealLogMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.meal_log.MealLogDto;
@@ -38,7 +38,7 @@ public class MealLogService {
     }
 
     public MealLogDto logMeal(MealFormRequest mealFormRequest, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserAlreadyExistsException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         Dish dish = dishRepository.findById(mealFormRequest.getDishId()).orElseThrow(() -> new DishNotFoundException(mealFormRequest.getDishId()));
 
@@ -84,7 +84,7 @@ public class MealLogService {
     }
 
     public List<MealLogRepresentation> findByGroup(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         List<MealLog> logs = mealLogRepository.findByUserGroupOrderByLoggedInOnDesc(user.getGroup());
 
         return logs.stream().map(MealLogMapper::toRepresentation).toList();

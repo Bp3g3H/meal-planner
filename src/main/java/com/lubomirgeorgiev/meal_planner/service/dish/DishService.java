@@ -1,5 +1,7 @@
 package com.lubomirgeorgiev.meal_planner.service.dish;
 
+import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
+import com.lubomirgeorgiev.meal_planner.exception.UserNotFoundException;
 import com.lubomirgeorgiev.meal_planner.mapper.dish.DishMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishDto;
@@ -31,12 +33,12 @@ public class DishService {
     }
 
     public DishFormRequest findByIdToFormDto(UUID id) {
-        Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
+        Dish dish = dishRepository.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         return DishMapper.toDishCreateRequest(dish);
     }
 
     public DishDto create(DishFormRequest dishCreateForm, UUID userId) {
-        User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user =  userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Dish dish = Dish.builder()
                 .name(dishCreateForm.getName())
                 .description(dishCreateForm.getDescription())
@@ -51,7 +53,7 @@ public class DishService {
     }
 
     public DishDto update(UUID id, DishFormRequest dishCreateRequest) {
-        Dish dish = dishRepository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
+        Dish dish = dishRepository.findById(id).orElseThrow(() -> new DishNotFoundException(id));
 
         dish.setName(dishCreateRequest.getName());
         dish.setDescription(dishCreateRequest.getDescription());

@@ -1,5 +1,6 @@
 package com.lubomirgeorgiev.meal_planner.service.group;
 
+import com.lubomirgeorgiev.meal_planner.exception.GroupIsAlreadyUpgradedException;
 import com.lubomirgeorgiev.meal_planner.exception.GroupNameTakenException;
 import com.lubomirgeorgiev.meal_planner.exception.GroupNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.InvalidGroupPasswordException;
@@ -72,7 +73,7 @@ public class GroupService {
                 .orElseThrow(GroupNotFoundException::new);
 
         if (!group.isDummy()) {
-            throw new IllegalStateException("(Group is already upgraded");
+            throw new GroupIsAlreadyUpgradedException();
         }
 
         if (groupRepository.existsByName(groupUpgradeDto.getName())) {
