@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <body>
 <nav th:fragment="navbar" class="navbar">
   <div class="navbar__inner">
@@ -10,25 +13,25 @@
     <ul class="navbar__links">
       <li><a th:href="@{/}">Home</a></li>
       <li><a th:href="@{/dishes}">Dish Catalog</a></li>
-      <li th:if="${session.user_id != null}">
+      <li sec:authorize="isAuthenticated()">
         <a th:href="@{/meals/log}">Log Meal</a>
       </li>
-      <li th:if="${session.user_id != null}">
+      <li sec:authorize="isAuthenticated()">
         <a th:href="@{/meals/diary}">My Diary</a>
       </li>
-      <li th:if="${session.user_id != null}">
+      <li sec:authorize="isAuthenticated()">
         <a th:href="@{/group}">Group</a>
       </li>
-      <li th:if="${session.user_role == 'ADMIN'}">
+      <li sec:authorize="hasAuthority('ADMIN')">
         <a th:href="@{/admin/dishes}">Admin</a>
       </li>
-      <li th:unless="${session.user_id != null}">
+      <li sec:authorize="!isAuthenticated()">
         <a th:href="@{/login}">Login</a>
       </li>
-      <li th:unless="${session.user_id != null}">
+      <li sec:authorize="!isAuthenticated()">
         <a th:href="@{/register}">Register</a>
       </li>
-      <li th:if="${session.user_id != null}">
+      <li sec:authorize="isAuthenticated()">
         <form th:action="@{/logout}" method="get" class="navbar__logout-form">
           <button type="submit" class="navbar__logout-btn">Logout</button>
         </form>

@@ -6,10 +6,11 @@ import com.lubomirgeorgiev.meal_planner.model.dto.group.GroupUpgradeDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.service.group.GroupService;
 import com.lubomirgeorgiev.meal_planner.service.group.GroupUpgradeResult;
+import com.lubomirgeorgiev.meal_planner.service.user.AuthenticationUserDetails;
 import com.lubomirgeorgiev.meal_planner.service.user.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/group")
@@ -35,8 +34,8 @@ public class GroupController {
     }
 
     @GetMapping
-    public ModelAndView getGroupSettingsPage(HttpSession session) {
-        UserDto userDto = userService.getById((UUID)  session.getAttribute("user_id"));
+    public ModelAndView getGroupSettingsPage(@AuthenticationPrincipal AuthenticationUserDetails user) {
+        UserDto userDto = userService.getById(user.getId());
         GroupDto groupDto = userDto.getGroup();
         ModelAndView modelAndView = new ModelAndView("group-settings");
         modelAndView.addObject("groupDto", groupDto);
@@ -52,10 +51,10 @@ public class GroupController {
     public ModelAndView upgrade(
             @Valid @ModelAttribute("groupUpgradeDto") GroupUpgradeDto groupUpgradeDto,
             BindingResult result,
-            HttpSession session,
+            @AuthenticationPrincipal AuthenticationUserDetails user,
             RedirectAttributes redirectAttributes
     ) {
-        UserDto userDto = userService.getById((UUID)  session.getAttribute("user_id"));
+        UserDto userDto = userService.getById(user.getId());
         GroupDto groupDto = userDto.getGroup();
         if (result.hasErrors()) {
 

@@ -20,16 +20,15 @@
         </div>
 
         <form th:action="@{/login}" th:object="${loginDto}" method="post">
+            <p class="error-text" th:if="${loginError}" th:text="${loginError}"></p>
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" th:field="*{email}" placeholder="john@example.com">
-                <div th:errors="*{email}" class="error-text"></div>
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" th:field="*{password}" placeholder="Enter password">
-                <div th:errors="*{password}" class="error-text"></div>
             </div>
 
             <button type="submit" class="btn btn--primary" style="width: 100%;">Login</button>

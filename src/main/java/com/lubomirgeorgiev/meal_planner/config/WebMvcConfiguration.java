@@ -1,23 +1,42 @@
 package com.lubomirgeorgiev.meal_planner.config;
 
-import com.lubomirgeorgiev.meal_planner.security.SessionInterceptor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@EnableMethodSecurity
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-    private final SessionInterceptor sessionInterceptor;
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .permitAll()
+                .requestMatchers("/", "/login", "/register", "/error")
+                .permitAll()
+                .requestMatchers("/admin/**")
+                .hasAuthority("ADMIN")
+                .anyRequest()
+                .authenticated()
+        ).formLogin(formLogin -> {
+            formLogin.loginPage("/login")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/dishes", true)
+                    .failureUrl("/login?error=true")
+                    .permitAll();
+        }).logout(logout -> {
+            logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                    .logoutSuccessUrl("/");
+        });
 
-    public WebMvcConfiguration(SessionInterceptor sessionInterceptor) {
-        this.sessionInterceptor = sessionInterceptor;
-    }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/images/**");
+        return http.build();
     }
 }

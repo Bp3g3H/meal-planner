@@ -14,6 +14,9 @@ import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.UserRole;
 import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
 import com.lubomirgeorgiev.meal_planner.service.group.GroupService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
@@ -79,5 +82,17 @@ public class UserService {
         }
 
         return UserMapper.toUserDto(user.get());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+
+        return AuthenticationUserDetails.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .build();
     }
 }

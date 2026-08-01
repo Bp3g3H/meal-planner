@@ -3,8 +3,9 @@ package com.lubomirgeorgiev.meal_planner.web.dish;
 import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.DishCategory;
 import com.lubomirgeorgiev.meal_planner.service.dish.DishService;
-import jakarta.servlet.http.HttpSession;
+import com.lubomirgeorgiev.meal_planner.service.user.AuthenticationUserDetails;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,14 +48,14 @@ public class DishController {
     }
 
     @PostMapping("/admin/dishes/add")
-    public ModelAndView createDish(@Valid @ModelAttribute DishFormRequest dishFormRequest, BindingResult bindingResult, HttpSession session) {
+    public ModelAndView createDish(@Valid @ModelAttribute DishFormRequest dishFormRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationUserDetails user) {
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("admin-dish-form");
             modelAndView.addObject("dishCategories", DishCategory.values());
             return modelAndView;
         }
 
-        dishService.create(dishFormRequest, (UUID) session.getAttribute("user_id"));
+        dishService.create(dishFormRequest, user.getId());
         return new ModelAndView("redirect:/admin/dishes");
     }
 

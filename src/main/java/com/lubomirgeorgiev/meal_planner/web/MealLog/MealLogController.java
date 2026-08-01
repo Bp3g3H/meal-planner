@@ -9,9 +9,10 @@ import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealPortionSize;
 import com.lubomirgeorgiev.meal_planner.model.entity.meal_log.MealType;
 import com.lubomirgeorgiev.meal_planner.service.dish.DishService;
 import com.lubomirgeorgiev.meal_planner.service.meal_log.MealLogService;
+import com.lubomirgeorgiev.meal_planner.service.user.AuthenticationUserDetails;
 import com.lubomirgeorgiev.meal_planner.service.user.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class MealLogController {
     }
 
     @PostMapping("/log")
-    public ModelAndView logMeal(@Valid @ModelAttribute MealFormRequest mealFormRequest, BindingResult bindingResult, HttpSession session) {
+    public ModelAndView logMeal(@Valid @ModelAttribute MealFormRequest mealFormRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationUserDetails user) {
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("log-meal");
             modelAndView.addObject("mealTypes", MealType.values());
@@ -56,14 +57,14 @@ public class MealLogController {
             return modelAndView;
         }
 
-        mealLogService.logMeal(mealFormRequest, (UUID) session.getAttribute("user_id"));
+        mealLogService.logMeal(mealFormRequest, user.getId());
         return new ModelAndView("redirect:/meals/diary");
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView getEditLogPage(@PathVariable UUID id, HttpSession session) {
+    public ModelAndView getEditLogPage(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationUserDetails user) {
         ModelAndView modelAndView = new ModelAndView("edit-meal");
-        modelAndView.addObject("mealFormRequest", mealLogService.getMealFormRequestByIdAndUser(id, (UUID) session.getAttribute("user_id")));
+        modelAndView.addObject("mealFormRequest", mealLogService.getMealFormRequestByIdAndUser(id, user.getId()));
         modelAndView.addObject("dishes", dishService.findAll());
         modelAndView.addObject("mealLogId", id);
         modelAndView.addObject("mealTypes", MealType.values());
@@ -76,7 +77,7 @@ public class MealLogController {
             @PathVariable UUID id,
             @Valid @ModelAttribute("mealFormRequest") MealFormRequest mealFormRequest,
             BindingResult result,
-            HttpSession session) {
+            @AuthenticationPrincipal AuthenticationUserDetails user) {
 
 
         if (result.hasErrors()) {
@@ -89,7 +90,7 @@ public class MealLogController {
         }
 
         try {
-            mealLogService.updateMeal(id, mealFormRequest, (UUID) session.getAttribute("user_id"));
+            mealLogService.updateMeal(id, mealFormRequest, user.getId());
         } catch (DishNotFoundException ex) {
             result.rejectValue("dishId", "dish.notfound", ex.getMessage());
             ModelAndView modelAndView = new ModelAndView("edit-meal");
@@ -106,8 +107,8 @@ public class MealLogController {
     }
 
     @GetMapping("/diary")
-    public ModelAndView diary(HttpSession session) {
-        UserDto currentUser = userService.getById((UUID) session.getAttribute("user_id"));
+    public ModelAndView diary(@AuthenticationPrincipal AuthenticationUserDetails user) {
+        UserDto currentUser = userService.getById(user.getId());
         List<MealLogRepresentation> logs = mealLogService.findByGroup(currentUser.getId());
         ModelAndView modelAndView = new ModelAndView("my-diary");
         modelAndView.addObject("mealLogs", logs);
@@ -119,8 +120,8 @@ public class MealLogController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable UUID id, HttpSession session) {
-        mealLogService.delete(id, (UUID) session.getAttribute("user_id"));
+    public String delete(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationUserDetails user) {
+        mealLogService.delete(id, user.getId());
         return "redirect:/meals/diary";
     }
 }
