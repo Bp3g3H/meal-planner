@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
 	<groupId>com.lubomirgeorgiev</groupId>
-	<artifactId>meal-planner</artifactId>
+	<artifactId>meal-planner-web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
