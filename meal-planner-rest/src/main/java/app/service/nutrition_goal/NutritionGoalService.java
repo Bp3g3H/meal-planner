@@ -1,5 +1,6 @@
 package app.service.nutrition_goal;
 
+import app.exception.NutritionGoalAlreadyExistsException;
 import app.mapper.nutrition_goal.NutritionGoalMapper;
 import app.model.dto.nutrition_goal.NutritionGoalRequest;
 import app.model.dto.nutrition_goal.NutritionGoalResponse;
@@ -21,8 +22,7 @@ public class NutritionGoalService {
 
     public NutritionGoalResponse create(NutritionGoalRequest nutritionGoalRequest) {
         if (nutritionGoalRepository.existsByExternalUserId(nutritionGoalRequest.getExternalUserId())) {
-            // TODO CHANGE LATER TO CUSTOM EXCEPTION
-            throw new IllegalArgumentException("Nutrition goal already exists for this user");
+            throw new NutritionGoalAlreadyExistsException(nutritionGoalRequest.getExternalUserId());
         }
 
         NutritionGoal nutritionGoal = NutritionGoal.builder()
@@ -39,8 +39,7 @@ public class NutritionGoalService {
 
     public NutritionGoalResponse update(NutritionGoalRequest nutritionGoalRequest) {
         NutritionGoal nutritionGoal = nutritionGoalRepository.findByExternalUserId(nutritionGoalRequest.getExternalUserId())
-                // TODO CHANGE LATER TO CUSTOM EXCEPTION
-                .orElseThrow(() -> new IllegalArgumentException("Nutrition goal not found for this user"));
+                .orElseThrow(() -> new NutritionGoalAlreadyExistsException(nutritionGoalRequest.getExternalUserId()));
 
         nutritionGoal.setDailyCalorieTarget(nutritionGoalRequest.getDailyCalorieTarget());
         nutritionGoalRepository.save(nutritionGoal);
@@ -50,8 +49,7 @@ public class NutritionGoalService {
 
     public NutritionGoalResponse findByExternalUserId(UUID externalUserId) {
         NutritionGoal nutritionGoal = nutritionGoalRepository.findByExternalUserId(externalUserId)
-                // TODO CHANGE LATER TO CUSTOM EXCEPTION
-                .orElseThrow(() -> new IllegalArgumentException("Nutrition goal not found for this user"));
+                .orElseThrow(() -> new NutritionGoalAlreadyExistsException(externalUserId));
 
         return NutritionGoalMapper.toNutritionGoalResponse(nutritionGoal);
     }
