@@ -1,8 +1,13 @@
 package app.model.dto.compliance_check;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Data
+@Builder
 public class ComplianceCheckResponse {
 
     private UUID id;
