@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -26,13 +27,13 @@ public class ComplianceCheck {
     private UUID externalUserId;
 
     @Column(nullable = false)
-    private LocalDateTime checkDate;
+    private LocalDate checkDate;
 
     @Column(nullable = false)
-    private int totalCaloriesConsumed;
+    private Integer totalCaloriesConsumed;
 
     @Column(nullable = false)
-    private int targetCalories;
+    private Integer targetCalories;
 
     @Column(nullable = false)
     private boolean withinTarget;

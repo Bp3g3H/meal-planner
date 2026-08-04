@@ -27,7 +27,7 @@ public class NutritionGoal {
     private UUID externalUserId;
 
     @Column(nullable = false)
-    private int dailyCalorieTarget;
+    private Integer dailyCalorieTarget;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
