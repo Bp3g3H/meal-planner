@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 public class ComplianceCheckService {
 
-    private ComplianceCheckRepository complianceCheckRepository;
+    private final ComplianceCheckRepository complianceCheckRepository;
 
     public ComplianceCheckService(ComplianceCheckRepository complianceCheckRepository) {
         this.complianceCheckRepository = complianceCheckRepository;

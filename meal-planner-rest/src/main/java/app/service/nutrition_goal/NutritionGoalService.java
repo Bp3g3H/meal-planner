@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public class NutritionGoalService {
 
-    private NutritionGoalRepository nutritionGoalRepository;
+    private final NutritionGoalRepository nutritionGoalRepository;
 
     public NutritionGoalService(NutritionGoalRepository nutritionGoalRepository) {
         this.nutritionGoalRepository = nutritionGoalRepository;
