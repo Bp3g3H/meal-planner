@@ -1,4 +1,4 @@
-package com.lubomirgeorgiev.meal_planner.web.MealLog;
+package com.lubomirgeorgiev.meal_planner.web.meal_log;
 
 import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.MealLogNotFoundException;
