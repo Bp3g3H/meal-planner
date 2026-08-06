@@ -19,6 +19,7 @@ public class AuthenticationUserDetails implements UserDetails {
 
     private UUID id;
     private String username;
+    private String email;
     private String password;
     private UserRole role;
 

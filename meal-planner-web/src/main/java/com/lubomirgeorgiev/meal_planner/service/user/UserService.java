@@ -1,11 +1,10 @@
 package com.lubomirgeorgiev.meal_planner.service.user;
 
-import com.lubomirgeorgiev.meal_planner.exception.InvalidCredentialsException;
 import com.lubomirgeorgiev.meal_planner.exception.PasswordDoesNotMatchException;
 import com.lubomirgeorgiev.meal_planner.exception.UserAlreadyExistsException;
 import com.lubomirgeorgiev.meal_planner.exception.UserNotFoundException;
 import com.lubomirgeorgiev.meal_planner.mapper.user.UserMapper;
-import com.lubomirgeorgiev.meal_planner.model.dto.user.LoginDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.user.ProfileUpdateDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserDto;
 import com.lubomirgeorgiev.meal_planner.model.dto.user.UserRegisterRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
@@ -21,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -73,17 +71,6 @@ public class UserService implements UserDetailsService {
         return UserMapper.toUserDto(user);
     }
 
-    public UserDto login (LoginDto loginDto) {
-        Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
-
-        if (user.isEmpty() ||
-                !passwordEncoder.matches(loginDto.getPassword(), user.get().getPassword())) {
-            throw new InvalidCredentialsException();
-        }
-
-        return UserMapper.toUserDto(user.get());
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
@@ -91,8 +78,18 @@ public class UserService implements UserDetailsService {
         return AuthenticationUserDetails.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
                 .build();
+    }
+
+    public UserDto updateProfile(UUID userId, ProfileUpdateDto profileUpdateDto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        user.setUsername(profileUpdateDto.getUsername());
+        userRepository.save(user);
+
+        return UserMapper.toUserDto(user);
     }
 }
