@@ -4,6 +4,7 @@ import com.lubomirgeorgiev.meal_planner.model.dto.nutrition_goal.NutritionGoalFo
 import com.lubomirgeorgiev.meal_planner.model.dto.nutrition_goal.NutritionGoalResponse;
 import com.lubomirgeorgiev.meal_planner.service.nutrition.NutritionGoalClientService;
 import com.lubomirgeorgiev.meal_planner.service.user.AuthenticationUserDetails;
+import feign.RetryableException;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,15 +28,19 @@ public class NutritionGoalController {
 
     @GetMapping
     public ModelAndView view(@AuthenticationPrincipal AuthenticationUserDetails currentUser) {
-        NutritionGoalResponse goal = nutritionGoalClientService.getGoal(currentUser.getId());
-        NutritionGoalFormDto dto = NutritionGoalFormDto.builder()
-                .dailyCalorieTarget(goal.getDailyCalorieTarget())
-                .build();
-
         ModelAndView modelAndView = new ModelAndView("nutrition-goal");
-        modelAndView.addObject("goal", goal);
-        modelAndView.addObject("dto", dto);
+        try {
+            NutritionGoalResponse goal = nutritionGoalClientService.getGoal(currentUser.getId());
+            NutritionGoalFormDto dto = NutritionGoalFormDto.builder()
+                    .dailyCalorieTarget(goal.getDailyCalorieTarget())
+                    .build();
 
+
+            modelAndView.addObject("goal", goal);
+            modelAndView.addObject("dto", dto);
+        } catch (RetryableException e) {
+            modelAndView.addObject("serviceUnavailable", true);
+        }
         return modelAndView;
     }
 
@@ -50,8 +55,14 @@ public class NutritionGoalController {
         }
 
         ModelAndView modelAndView = new ModelAndView("redirect:/nutrition-goal");
-        nutritionGoalClientService.saveGoal(currentUser.getId(), dto.getDailyCalorieTarget());
-        redirectAttributes.addFlashAttribute("saved", true);
+
+        try {
+            nutritionGoalClientService.saveGoal(currentUser.getId(), dto.getDailyCalorieTarget());
+            redirectAttributes.addFlashAttribute("saved", true);
+        }  catch (RetryableException e) {
+            modelAndView.addObject("serviceUnavailable", true);
+        }
+
         return modelAndView;
     }
 }
