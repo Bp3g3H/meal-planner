@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nutrition Goal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="page">
+    <h2>Your nutrition goal</h2>
+
+    <div th:if="${saved}" class="success-text">
+        Goal saved.
+    </div>
+
+    <div th:if="${serviceUnavailable}" class="error-text">
+        Nutrition service is temporarily unavailable — try again shortly.
+    </div>
+
+    <div th:if="${goal}" class="info-box">
+        <p>Current daily calorie target: <strong th:text="${goal.dailyCalorieTarget}"></strong> kcal</p>
+        <p class="muted"
+           th:text="'Last updated: ' + ${#temporals.format(goal.updatedOn, 'dd MMM yyyy, HH:mm')}"></p>
+    </div>
+
+    <div th:unless="${goal}" class="info-box">
+        <p>You haven't set a nutrition goal yet.</p>
+    </div>
+
+    <form th:action="@{/nutrition-goal}" th:object="${goalDto}" method="post">
+        <label for="dailyCalorieTarget"
+               th:text="${goal} ? 'Update daily calorie target' : 'Set daily calorie target'"></label>
+        <input type="number" id="dailyCalorieTarget" th:field="*{dailyCalorieTarget}"
+               min="500" max="10000" placeholder="e.g. 2000">
+        <div th:errors="*{dailyCalorieTarget}" class="error-text"></div>
+
+        <button type="submit" th:text="${goal} ? 'Update goal' : 'Save goal'"></button>
+    </form>
+</main>
+
+</body>
+</html>

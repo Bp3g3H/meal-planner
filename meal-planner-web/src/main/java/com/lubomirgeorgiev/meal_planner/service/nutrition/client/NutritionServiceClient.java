@@ -1,4 +1,4 @@
-package com.lubomirgeorgiev.meal_planner.client;
+package com.lubomirgeorgiev.meal_planner.service.nutrition.client;
 
 import com.lubomirgeorgiev.meal_planner.model.dto.compliance_check.ComplianceCheckRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.compliance_check.WeeklyComplianceSummaryResponse;
