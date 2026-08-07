@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users — MealPlanner</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar(activePage='admin-users')}"></div>
+
+<main>
+    <header class="page-header">
+        <h1>Manage Users</h1>
+        <p>Admin panel — view registered users and change their roles.</p>
+    </header>
+
+    <div class="success-banner" th:if="${updated}">
+        <p>Role updated.</p>
+    </div>
+
+    <div class="admin-toolbar">
+        <p style="margin: 0; color: var(--color-text-muted);" th:text="${users.size()} + ' users total'"></p>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Current Role</th>
+                <th>Change Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.username}"></td>
+                <td th:text="${u.email}"></td>
+                <td><span class="badge badge--role" th:text="${u.role}"></span></td>
+                <td>
+                    <form th:action="@{/admin/users/{id}/role(id=${u.id})}" method="post" class="inline-form">
+                        <select name="newRole">
+                            <option th:each="r : ${T(com.mealplanner.enums.Role).values()}"
+                                    th:value="${r}" th:text="${r}"
+                                    th:selected="${r == u.role}"></option>
+                        </select>
+                        <button type="submit" class="btn btn--outline btn--sm">Update</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+</footer>
+
+</body>
+</html>

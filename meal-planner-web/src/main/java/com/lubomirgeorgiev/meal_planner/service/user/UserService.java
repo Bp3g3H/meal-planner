@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -91,5 +92,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return UserMapper.toUserDto(user);
+    }
+
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAllOrderByUsernameAsc();
+
+        return users.stream().map(UserMapper::toUserDto).toList();
+    }
+
+    public void changeRole(UUID id, UserRole userRole) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        user.setRole(userRole);
+
+        userRepository.save(user);
     }
 }
