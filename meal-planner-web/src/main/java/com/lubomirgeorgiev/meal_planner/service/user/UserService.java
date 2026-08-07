@@ -95,7 +95,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAllOrderByUsernameAsc();
+        List<User> users = userRepository.findAllByOrderByUsernameAsc();
 
         return users.stream().map(UserMapper::toUserDto).toList();
     }

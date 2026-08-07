@@ -25,7 +25,7 @@ public class AdminUserController {
     public ModelAndView users() {
         ModelAndView modelAndView = new ModelAndView("admin-users");
         modelAndView.addObject("users", userService.getAllUsers());
-
+        modelAndView.addObject("userRoles" , UserRole.values());
         return modelAndView;
     }
 

@@ -5,55 +5,88 @@
 >
 <body>
 <nav th:fragment="navbar" class="navbar">
-  <div class="navbar__inner">
-    <a th:href="@{/}" class="navbar__brand">
-      <span class="navbar__logo" aria-hidden="true">🍽</span>
-      MealPlanner
-    </a>
-    <ul class="navbar__links">
-        <li>
-            <a th:href="@{/}">Home</a>
-        </li>
-        <li>
-            <a th:href="@{/dishes}">Dish Catalog</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/meals/log}">Log Meal</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/meals/diary}">My Diary</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/group}">Group</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/nutrition-goal}">Nutrition Goal</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/nutrition-insights}">Nutrition Insights</a>
-        </li>
-        <li sec:authorize="hasAuthority('ADMIN')">
-            <a th:href="@{/admin/dishes}">Dishes (Admin)</a>
-        </li>
-        <li sec:authorize="hasRole('ADMIN')">
-            <a  th:href="@{/admin/users}">Manage Users (Admin)</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <a th:href="@{/profile}">Profile</a>
-        </li>
-        <li sec:authorize="!isAuthenticated()">
-            <a th:href="@{/login}">Login</a>
-        </li>
-        <li sec:authorize="!isAuthenticated()">
-            <a th:href="@{/register}">Register</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <form th:action="@{/logout}" method="get" class="navbar__logout-form">
-              <button type="submit" class="navbar__logout-btn">Logout</button>
-            </form>
-        </li>
-    </ul>
-  </div>
+    <div class="navbar__inner">
+
+        <a th:href="@{/}" class="navbar__brand">
+            <span class="navbar__logo">🍽</span>
+            MealPlanner
+        </a>
+
+        <ul class="navbar__links">
+
+            <li><a th:href="@{/}">Home</a></li>
+
+            <li><a th:href="@{/dishes}">Dish Catalog</a></li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/meals/diary}">My Diary</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/meals/log}">Log Meal</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/group}">Group</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/nutrition-goal}">Nutrition Goal</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/nutrition-insights}">Insights</a>
+            </li>
+
+            <!-- Admin dropdown -->
+            <li class="navbar__dropdown" sec:authorize="hasAuthority('ADMIN')">
+                <button type="button" class="navbar__dropdown-btn">
+                    Admin ▾
+                </button>
+
+                <div class="navbar__dropdown-content">
+                    <a th:href="@{/admin/users}">Manage Users</a>
+                    <a th:href="@{/admin/dishes}">Manage Dishes</a>
+                </div>
+            </li>
+
+            <!-- Guest -->
+            <li sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}">Login</a>
+            </li>
+
+            <li sec:authorize="!isAuthenticated()">
+                <a th:href="@{/register}" class="btn-primary">
+                    Register
+                </a>
+            </li>
+
+            <!-- User dropdown -->
+            <li class="navbar__dropdown" sec:authorize="isAuthenticated()">
+
+                <button type="button" class="navbar__dropdown-btn">
+                    <span sec:authentication="name"></span> ▾
+                </button>
+
+                <div class="navbar__dropdown-content">
+
+                    <a th:href="@{/profile}">
+                        Profile
+                    </a>
+
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit">
+                            Logout
+                        </button>
+                    </form>
+
+                </div>
+
+            </li>
+
+        </ul>
+
+    </div>
 </nav>
 </body>
 </html>
