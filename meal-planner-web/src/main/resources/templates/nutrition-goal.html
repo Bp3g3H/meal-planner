@@ -2,44 +2,59 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nutrition Goal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Goal — MealPlanner</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/navbar :: navbar(activePage='nutrition-goal')}"></div>
 
-<main class="page">
-    <h2>Your nutrition goal</h2>
+<main>
+    <header class="page-header">
+        <h1>Your Nutrition Goal</h1>
+        <p>Set a daily calorie target and track how well you stick to it.</p>
+    </header>
 
-    <div th:if="${saved}" class="success-text">
-        Goal saved.
+    <div class="success-banner" th:if="${saved}">
+        <p>Goal saved.</p>
     </div>
 
-    <div th:if="${serviceUnavailable}" class="error-text">
-        Nutrition service is temporarily unavailable — try again shortly.
+    <div class="error-banner" th:if="${serviceUnavailable}">
+        <p>Nutrition service is temporarily unavailable — try again shortly.</p>
     </div>
 
-    <div th:if="${goal}" class="info-box">
-        <p>Current daily calorie target: <strong th:text="${goal.dailyCalorieTarget}"></strong> kcal</p>
-        <p class="muted"
-           th:text="'Last updated: ' + ${#temporals.format(goal.updatedOn, 'dd MMM yyyy, HH:mm')}"></p>
+    <div class="info-card" th:if="${goal}">
+        <h2 class="section-title">Current Goal</h2>
+        <p>Daily calorie target: <strong th:text="${goal.dailyCalorieTarget} + ' kcal'"></strong></p>
+        <p class="hint" th:text="'Last updated: ' + ${#temporals.format(goal.updatedAt, 'dd MMM yyyy, HH:mm')}"></p>
     </div>
 
-    <div th:unless="${goal}" class="info-box">
+    <div class="info-card" th:unless="${goal}">
         <p>You haven't set a nutrition goal yet.</p>
     </div>
 
-    <form th:action="@{/nutrition-goal}" th:object="${goalDto}" method="post">
-        <label for="dailyCalorieTarget"
-               th:text="${goal} ? 'Update daily calorie target' : 'Set daily calorie target'"></label>
-        <input type="number" id="dailyCalorieTarget" th:field="*{dailyCalorieTarget}"
-               min="500" max="10000" placeholder="e.g. 2000">
-        <div th:errors="*{dailyCalorieTarget}" class="error-text"></div>
+    <div class="form-card">
+        <h2 class="section-title" th:text="${goal} ? 'Update Daily Calorie Target' : 'Set Daily Calorie Target'"></h2>
+        <p class="subtitle">We'll use this to check whether your logged meals stay within target each day.</p>
 
-        <button type="submit" th:text="${goal} ? 'Update goal' : 'Save goal'"></button>
-    </form>
+        <form th:action="@{/nutrition-goal}" th:object="${goalDto}" method="post">
+            <div class="form-group">
+                <label for="dailyCalorieTarget">Daily Calorie Target (kcal)</label>
+                <input type="number" id="dailyCalorieTarget" th:field="*{dailyCalorieTarget}"
+                       min="500" max="10000" placeholder="e.g. 2000">
+                <p class="field-error" th:errors="*{dailyCalorieTarget}"></p>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="width: 100%;"
+                    th:text="${goal} ? 'Update Goal' : 'Save Goal'"></button>
+        </form>
+    </div>
 </main>
+
+<footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+</footer>
 
 </body>
 </html>
