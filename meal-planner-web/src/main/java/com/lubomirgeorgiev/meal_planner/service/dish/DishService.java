@@ -3,13 +3,15 @@ package com.lubomirgeorgiev.meal_planner.service.dish;
 import com.lubomirgeorgiev.meal_planner.exception.DishNotFoundException;
 import com.lubomirgeorgiev.meal_planner.exception.UserNotFoundException;
 import com.lubomirgeorgiev.meal_planner.mapper.dish.DishMapper;
-import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishDto;
+import com.lubomirgeorgiev.meal_planner.model.dto.dish.DishFormRequest;
 import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.repository.dish.DishRepository;
 import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class DishService {
         this.userRepository = userRepository;
     }
 
+    @Cacheable("dishes")
     public List<DishDto> findAll() {
         return dishRepository.findAllByOrderByNameAsc().stream().map(DishMapper::toDishDto).toList();
     }
@@ -37,6 +40,7 @@ public class DishService {
         return DishMapper.toDishCreateRequest(dish);
     }
 
+    @CacheEvict(value = "dishes", allEntries = true)
     public DishDto create(DishFormRequest dishCreateForm, UUID userId) {
         User user =  userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Dish dish = Dish.builder()
@@ -52,6 +56,7 @@ public class DishService {
         return DishMapper.toDishDto(dish);
     }
 
+    @CacheEvict(value = "dishes", allEntries = true)
     public DishDto update(UUID id, DishFormRequest dishCreateRequest) {
         Dish dish = dishRepository.findById(id).orElseThrow(() -> new DishNotFoundException(id));
 
@@ -65,6 +70,7 @@ public class DishService {
         return DishMapper.toDishDto(savedDish);
     }
 
+    @CacheEvict(value = "dishes", allEntries = true)
     public void deleteById(UUID id) {
         dishRepository.deleteById(id);
     }
