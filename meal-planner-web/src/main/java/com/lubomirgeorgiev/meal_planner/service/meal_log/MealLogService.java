@@ -102,4 +102,11 @@ public class MealLogService {
         MealLog mealLog = findByIdAndUser(id, userId);
         mealLogRepository.delete(mealLog);
     }
+
+    public int getTotalCaloriesForUserOnDate(UUID userId, LocalDate date) {
+        return mealLogRepository.findByUser_IdAndLoggedIn(userId, date).stream().mapToInt(log ->
+             Math.toIntExact(Math.round(log.getDish().getCalories() * log.getPortionSize().getMultiplier()))
+        ).sum();
+    }
+
 }
