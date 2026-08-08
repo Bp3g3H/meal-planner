@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Insights — MealPlanner</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar(activePage='nutrition-insights')}"></div>
+
+<main>
+    <header class="page-header">
+        <h1>Nutrition Insights</h1>
+        <p>See how well your logged meals compare to your daily calorie target.</p>
+    </header>
+
+    <div class="error-banner" th:if="${serviceUnavailable}">
+        <p>Nutrition service is temporarily unavailable — try again shortly.</p>
+    </div>
+
+    <div class="info-card" th:unless="${summary}">
+        <p>
+            No nutrition goal set yet.
+            <a th:href="@{/nutrition-goal}">Set one now</a> to start tracking compliance.
+        </p>
+    </div>
+
+    <section class="diary-summary" th:if="${summary}">
+        <div class="summary-card">
+            <div class="summary-card__value" th:text="${summary.daysWithinTarget}"></div>
+            <div class="summary-card__label">days within target (last 7 days)</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-card__value" th:text="${summary.daysOverTarget}"></div>
+            <div class="summary-card__label">days over target (last 7 days)</div>
+        </div>
+    </section>
+
+    <p th:if="${summary != null and #lists.isEmpty(summary.checks)}">
+        No compliance data yet — check back after your first full day of logged meals.
+    </p>
+
+    <div class="table-wrapper" th:if="${summary != null and not #lists.isEmpty(summary.checks)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Consumed</th>
+                <th>Target</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="check : ${summary.checks}">
+                <td th:text="${check.checkDate}"></td>
+                <td th:text="${check.totalCaloriesConsumed} + ' kcal'"></td>
+                <td th:text="${check.targetCalories} + ' kcal'"></td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${check.withinTarget} ? 'badge--success' : 'badge--danger'"
+                          th:text="${check.withinTarget} ? 'Within Target' : 'Over Target'"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-card" th:if="${trendingDish}">
+        <h2 class="section-title">Trending This Week</h2>
+        <p th:text="${trendingDish.name}"></p>
+    </div>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2026 MealPlanner. Personal Meal Planner &amp; Food Diary.</p>
+</footer>
+
+</body>
+</html>

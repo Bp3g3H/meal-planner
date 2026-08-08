@@ -104,9 +104,20 @@ public class MealLogService {
     }
 
     public int getTotalCaloriesForUserOnDate(UUID userId, LocalDate date) {
-        return mealLogRepository.findByUser_IdAndLoggedIn(userId, date).stream().mapToInt(log ->
+        return mealLogRepository.findByUser_IdAndLoggedInOn(userId, date).stream().mapToInt(log ->
              Math.toIntExact(Math.round(log.getDish().getCalories() * log.getPortionSize().getMultiplier()))
         ).sum();
+    }
+
+    public Dish getMostPopularDishForWeek() {
+
+        LocalDateTime from = LocalDateTime.now().minusDays(7);
+
+        return mealLogRepository
+                .findMostPopularDish(from)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
 }
