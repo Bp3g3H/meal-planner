@@ -8,9 +8,11 @@ import com.lubomirgeorgiev.meal_planner.service.nutrition.NutritionGoalClientSer
 import com.lubomirgeorgiev.meal_planner.service.nutrition.client.NutritionServiceClient;
 import com.lubomirgeorgiev.meal_planner.service.user.UserService;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+@Component
 public class ComplianceCheckJob {
 
     private final UserService userService;
