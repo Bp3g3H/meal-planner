@@ -9,6 +9,7 @@ import com.lubomirgeorgiev.meal_planner.model.entity.dish.Dish;
 import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.repository.dish.DishRepository;
 import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class DishService {
 
@@ -53,11 +55,14 @@ public class DishService {
                 .createdOn(LocalDateTime.now())
                 .build();
         dishRepository.save(dish);
+
+        log.info("Admin {} created dish {}", userId, dish.getId());
+
         return DishMapper.toDishDto(dish);
     }
 
     @CacheEvict(value = "dishes", allEntries = true)
-    public DishDto update(UUID id, DishFormRequest dishCreateRequest) {
+    public DishDto update(UUID id, DishFormRequest dishCreateRequest, UUID userId) {
         Dish dish = dishRepository.findById(id).orElseThrow(() -> new DishNotFoundException(id));
 
         dish.setName(dishCreateRequest.getName());
@@ -67,11 +72,17 @@ public class DishService {
         dish.setImageUrl(dishCreateRequest.getImageUrl());
 
         Dish savedDish = dishRepository.save(dish);
+
+        log.info("Admin {} updated dish {}", userId, id);
+
         return DishMapper.toDishDto(savedDish);
     }
 
     @CacheEvict(value = "dishes", allEntries = true)
-    public void deleteById(UUID id) {
+    public void deleteById(UUID id, UUID userId) {
+
+        log.info("Admin {} deleted dish {}", userId, id);
+
         dishRepository.deleteById(id);
     }
 }

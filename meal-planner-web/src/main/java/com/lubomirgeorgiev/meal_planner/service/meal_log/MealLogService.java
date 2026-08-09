@@ -13,6 +13,7 @@ import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.repository.dish.DishRepository;
 import com.lubomirgeorgiev.meal_planner.repository.meal_log.MealLogRepository;
 import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MealLogService {
 
@@ -52,6 +54,9 @@ public class MealLogService {
                 .build();
 
         mealLogRepository.save(mealLog);
+
+        log.info("User {} logged meal for dish {}", userId, dish.getId());
+
         return MealLogMapper.toMealLogDto(mealLog);
     }
 
@@ -71,16 +76,20 @@ public class MealLogService {
     }
 
     public MealLogDto updateMeal(UUID id, MealFormRequest mealFormRequest, UUID userId) {
-        MealLog log = findByIdAndUser(id, userId);
+        MealLog mealLog = findByIdAndUser(id, userId);
         Dish dish = dishRepository.findById(mealFormRequest.getDishId()).orElseThrow(() -> new DishNotFoundException(mealFormRequest.getDishId()));
 
-        log.setDish(dish);
-        log.setMealType(mealFormRequest.getMealType());
-        log.setPortionSize(mealFormRequest.getPortionSize());
-        log.setLoggedInOn(LocalDateTime.now());
-        log.setNotes(mealFormRequest.getNotes());
-        mealLogRepository.save(log);
-        return MealLogMapper.toMealLogDto(log);
+        mealLog.setDish(dish);
+        mealLog.setMealType(mealFormRequest.getMealType());
+        mealLog.setPortionSize(mealFormRequest.getPortionSize());
+        mealLog.setLoggedInOn(LocalDateTime.now());
+        mealLog.setNotes(mealFormRequest.getNotes());
+
+        mealLogRepository.save(mealLog);
+
+        log.info("User {} updated meal log {}", userId, id);
+
+        return MealLogMapper.toMealLogDto(mealLog);
     }
 
     public List<MealLogRepresentation> findByGroup(UUID userId) {
@@ -100,6 +109,9 @@ public class MealLogService {
 
     public void delete(UUID id, UUID userId) {
         MealLog mealLog = findByIdAndUser(id, userId);
+
+        log.info("User {} deleted meal log {}", userId, id);
+
         mealLogRepository.delete(mealLog);
     }
 

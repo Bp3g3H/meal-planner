@@ -69,7 +69,8 @@ public class DishController {
     }
 
     @PostMapping("/admin/dishes/edit/{id}")
-    public ModelAndView updateDish(@PathVariable UUID id, @Valid @ModelAttribute DishFormRequest dishFormRequest, BindingResult bindingResult) {
+    public ModelAndView updateDish(@PathVariable UUID id, @Valid @ModelAttribute DishFormRequest dishFormRequest, BindingResult bindingResult,
+                                   @AuthenticationPrincipal AuthenticationUserDetails user) {
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("admin-dish-edit");
             modelAndView.addObject("dishCategories", DishCategory.values());
@@ -77,13 +78,13 @@ public class DishController {
             return modelAndView;
         }
 
-        dishService.update(id, dishFormRequest);
+        dishService.update(id, dishFormRequest, user.getId());
         return new ModelAndView("redirect:/admin/dishes");
     }
 
     @PostMapping("/admin/dishes/delete/{id}")
-    public ModelAndView delete(@PathVariable UUID id) {
-        dishService.deleteById(id);
+    public ModelAndView delete(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationUserDetails user) {
+        dishService.deleteById(id, user.getId());
         return new ModelAndView("redirect:/admin/dishes");
     }
 }

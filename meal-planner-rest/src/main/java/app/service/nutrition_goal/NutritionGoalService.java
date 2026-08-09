@@ -6,11 +6,13 @@ import app.model.dto.nutrition_goal.NutritionGoalRequest;
 import app.model.dto.nutrition_goal.NutritionGoalResponse;
 import app.model.entity.nutrition_goal.NutritionGoal;
 import app.repository.nutrition_goal.NutritionGoalRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class NutritionGoalService {
 
@@ -34,6 +36,8 @@ public class NutritionGoalService {
 
         nutritionGoalRepository.save(nutritionGoal);
 
+        log.info("Created nutrition goal for user {}", nutritionGoalRequest.getExternalUserId());
+
         return NutritionGoalMapper.toNutritionGoalResponse(nutritionGoal);
     }
 
@@ -42,7 +46,10 @@ public class NutritionGoalService {
                 .orElseThrow(() -> new NutritionGoalAlreadyExistsException(nutritionGoalRequest.getExternalUserId()));
 
         nutritionGoal.setDailyCalorieTarget(nutritionGoalRequest.getDailyCalorieTarget());
+
         nutritionGoalRepository.save(nutritionGoal);
+
+        log.info("Updated nutrition goal for user {}", nutritionGoalRequest.getExternalUserId());
 
         return NutritionGoalMapper.toNutritionGoalResponse(nutritionGoal);
     }

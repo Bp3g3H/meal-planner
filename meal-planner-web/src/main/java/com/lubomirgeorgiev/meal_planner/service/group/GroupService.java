@@ -8,12 +8,14 @@ import com.lubomirgeorgiev.meal_planner.mapper.group.GroupMapper;
 import com.lubomirgeorgiev.meal_planner.model.dto.group.GroupUpgradeDto;
 import com.lubomirgeorgiev.meal_planner.model.entity.group.Group;
 import com.lubomirgeorgiev.meal_planner.repository.group.GroupRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class GroupService {
 
@@ -93,6 +95,9 @@ public class GroupService {
         }
 
         Group savedGroup = groupRepository.save(group);
+
+        log.info("User {} upgraded group {} to named group", userId, group.getId());
+
         return new GroupUpgradeResult(GroupMapper.toGroupDto(savedGroup), rawCode);
     }
 
