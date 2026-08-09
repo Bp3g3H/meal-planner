@@ -27,7 +27,7 @@
     <div class="info-card" th:if="${goal}">
         <h2 class="section-title">Current Goal</h2>
         <p>Daily calorie target: <strong th:text="${goal.dailyCalorieTarget} + ' kcal'"></strong></p>
-        <p class="hint" th:text="'Last updated: ' + ${#temporals.format(goal.updatedAt, 'dd MMM yyyy, HH:mm')}"></p>
+        <p class="hint" th:text="'Last updated: ' + ${#temporals.format(goal.updatedOn, 'dd MMM yyyy, HH:mm')}"></p>
     </div>
 
     <div class="info-card" th:unless="${goal}">

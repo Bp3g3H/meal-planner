@@ -19,7 +19,7 @@ public interface NutritionServiceClient {
     NutritionGoalResponse updateGoal(@RequestBody NutritionGoalRequest req);
 
     @GetMapping("/nutrition-goals/{userId}")
-    NutritionGoalResponse getGoal(@PathVariable UUID userId);
+    NutritionGoalResponse getGoalOrNull(@PathVariable UUID userId);
 
     @PostMapping("/compliance-checks")
     void recordComplianceCheck(@RequestBody ComplianceCheckRequest req);

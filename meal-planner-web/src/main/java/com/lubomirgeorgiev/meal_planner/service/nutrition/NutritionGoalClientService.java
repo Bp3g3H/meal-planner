@@ -17,16 +17,16 @@ public class NutritionGoalClientService {
         this.nutritionServiceClient = nutritionServiceClient;
     }
 
-    public NutritionGoalResponse getGoal(UUID userId) {
+    public NutritionGoalResponse getGoalOrNull(UUID userId) {
         try {
-            return nutritionServiceClient.getGoal(userId);
+            return nutritionServiceClient.getGoalOrNull(userId);
         } catch (FeignException.NotFound e) {
             return null;
         }
     }
 
     public NutritionGoalResponse saveGoal(UUID userId, Integer target) {
-        NutritionGoalResponse existing = getGoal(userId);
+        NutritionGoalResponse existing = getGoalOrNull(userId);
         NutritionGoalRequest request = NutritionGoalRequest.builder()
                 .externalUserId(userId)
                 .dailyCalorieTarget(target)

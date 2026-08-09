@@ -1,6 +1,7 @@
 package app.service.nutrition_goal;
 
 import app.exception.NutritionGoalAlreadyExistsException;
+import app.exception.NutritionGoalNotFoundException;
 import app.mapper.nutrition_goal.NutritionGoalMapper;
 import app.model.dto.nutrition_goal.NutritionGoalRequest;
 import app.model.dto.nutrition_goal.NutritionGoalResponse;
@@ -43,7 +44,7 @@ public class NutritionGoalService {
 
     public NutritionGoalResponse update(NutritionGoalRequest nutritionGoalRequest) {
         NutritionGoal nutritionGoal = nutritionGoalRepository.findByExternalUserId(nutritionGoalRequest.getExternalUserId())
-                .orElseThrow(() -> new NutritionGoalAlreadyExistsException(nutritionGoalRequest.getExternalUserId()));
+                .orElseThrow(() -> new NutritionGoalNotFoundException(nutritionGoalRequest.getExternalUserId()));
 
         nutritionGoal.setDailyCalorieTarget(nutritionGoalRequest.getDailyCalorieTarget());
 
@@ -55,9 +56,8 @@ public class NutritionGoalService {
     }
 
     public NutritionGoalResponse findByExternalUserId(UUID externalUserId) {
-        NutritionGoal nutritionGoal = nutritionGoalRepository.findByExternalUserId(externalUserId)
-                .orElseThrow(() -> new NutritionGoalAlreadyExistsException(externalUserId));
+        NutritionGoal nutritionGoal = nutritionGoalRepository.findByExternalUserId(externalUserId).orElse(null);
 
-        return NutritionGoalMapper.toNutritionGoalResponse(nutritionGoal);
+        return nutritionGoal != null ? NutritionGoalMapper.toNutritionGoalResponse(nutritionGoal) : null;
     }
 }

@@ -30,11 +30,10 @@ public class NutritionGoalController {
     public ModelAndView view(@AuthenticationPrincipal AuthenticationUserDetails currentUser) {
         ModelAndView modelAndView = new ModelAndView("nutrition-goal");
         try {
-            NutritionGoalResponse goal = nutritionGoalClientService.getGoal(currentUser.getId());
+            NutritionGoalResponse goal = nutritionGoalClientService.getGoalOrNull(currentUser.getId());
             NutritionGoalFormDto dto = NutritionGoalFormDto.builder()
-                    .dailyCalorieTarget(goal.getDailyCalorieTarget())
+                    .dailyCalorieTarget(goal != null ? goal.getDailyCalorieTarget() : 0)
                     .build();
-
 
             modelAndView.addObject("goal", goal);
             modelAndView.addObject("dto", dto);
@@ -54,7 +53,7 @@ public class NutritionGoalController {
             return modelAndView;
         }
 
-        ModelAndView modelAndView = new ModelAndView("redirect:/nutrition-goal");
+        ModelAndView modelAndView = new ModelAndView("redirect:/nutrition-goals");
 
         try {
             nutritionGoalClientService.saveGoal(currentUser.getId(), dto.getDailyCalorieTarget());

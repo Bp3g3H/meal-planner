@@ -35,7 +35,7 @@ public class ComplianceCheckJob {
     @Scheduled(cron = "0 5 0 * * *")
     public void runDailyComplianceCheck() {
         for (UserDto user : userService.getAllUsers()) {
-            NutritionGoalResponse goal = nutritionGoalClientService.getGoal(user.getId());
+            NutritionGoalResponse goal = nutritionGoalClientService.getGoalOrNull(user.getId());
 
             if (goal == null) {
                 continue;
