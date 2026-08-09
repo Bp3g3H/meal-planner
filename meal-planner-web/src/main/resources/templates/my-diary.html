@@ -35,7 +35,7 @@
                     th:text="${entry.mealType}"
                     th:classappend="' badge--' + ${#strings.toLowerCase(entry.mealType)}"></span>
                         <span>Portion: <strong th:text="${entry.portionSize}"></strong></span>
-                        <span>Calories: <strong th:text="${entry.dishCalories} + ' kcal'"></strong></span>
+                        <span>Calories: <strong th:text="${entry.dishCalories * entry.portionSize.multiplier} + ' kcal'"></strong></span>
                         <span class="entry-author" th:text="'by ' + ${entry.username}"></span>
                     </div>
                 </div>
