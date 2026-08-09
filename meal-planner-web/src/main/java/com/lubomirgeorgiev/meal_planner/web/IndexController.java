@@ -36,7 +36,9 @@ public class IndexController {
 
     @GetMapping("/register")
     public ModelAndView getRegisterPage(){
-        UserRegisterRequest userRegisterRequest = UserRegisterRequest.builder().build();
+        UserRegisterRequest userRegisterRequest = UserRegisterRequest.builder()
+                .groupChoice(GroupChoice.CREATE)
+                .build();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("register");
         modelAndView.addObject("userRegisterRequest", userRegisterRequest);
