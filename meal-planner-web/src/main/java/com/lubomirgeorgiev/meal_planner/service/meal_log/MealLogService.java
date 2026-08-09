@@ -13,6 +13,7 @@ import com.lubomirgeorgiev.meal_planner.model.entity.user.User;
 import com.lubomirgeorgiev.meal_planner.repository.dish.DishRepository;
 import com.lubomirgeorgiev.meal_planner.repository.meal_log.MealLogRepository;
 import com.lubomirgeorgiev.meal_planner.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -115,8 +116,13 @@ public class MealLogService {
         mealLogRepository.delete(mealLog);
     }
 
+    @Transactional
     public int getTotalCaloriesForUserOnDate(UUID userId, LocalDate date) {
-        return mealLogRepository.findByUser_IdAndLoggedInOn(userId, date).stream().mapToInt(log ->
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay();
+        List<MealLog> test = mealLogRepository.findByUser_IdAndLoggedInOnBetween(userId, start, end);
+
+        return test.stream().mapToInt(log ->
              Math.toIntExact(Math.round(log.getDish().getCalories() * log.getPortionSize().getMultiplier()))
         ).sum();
     }
