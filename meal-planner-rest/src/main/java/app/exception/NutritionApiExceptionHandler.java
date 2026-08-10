@@ -16,23 +16,23 @@ public class NutritionApiExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNutritionGoalAlreadyExistingException(HttpServletRequest request, NutritionGoalAlreadyExistsException exception) {
         ErrorResponse body = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(exception.getMessage())
-                .path(request.getRequestURI())
-                .build();
-
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(NutritionGoalNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNutritionGoalNotFoundException(HttpServletRequest request, NutritionGoalNotFoundException exception) {
-        ErrorResponse body = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
                 .message(exception.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NutritionGoalNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNutritionGoalNotFoundException(HttpServletRequest request, NutritionGoalNotFoundException exception) {
+        ErrorResponse body = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .message(exception.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 }
