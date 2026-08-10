@@ -79,13 +79,3 @@ empty user table. Change or remove before any real deployment.
 | `MealLog` | `@ManyToOne User`, `@ManyToOne Dish`, `mealType`, `portionSize`, `loggedInOn`, `notes` |
 
 
-## Testing
-
-```bash
-./mvnw test
-```
-
-Tests run against H2. Same JaCoCo 70% line-coverage gate as
-`meal-planner-rest` — currently only the default context-load test exists
-(`MealPlannerApplicationTests`), so the gate isn't yet meaningfully
-enforced.

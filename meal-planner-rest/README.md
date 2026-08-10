@@ -70,7 +70,7 @@ a real user.
 ## Testing
 
 ```bash
-./mvnw test
+mvn test
 ```
 
 Tests run against H2. JaCoCo is configured with a 70% line-coverage check,
