@@ -71,4 +71,4 @@ details, and change this before any real deployment).
 | Auth | Spring Security (form login) | none |
 | Inter-service | Feign client (caller) | — (callee) |
 | Test DB | H2 | H2 |
-| Coverage gate | JaCoCo, 70% line minimum | JaCoCo, 70% line minimum |
+| Coverage gate |  | JaCoCo, 70% line minimum |
